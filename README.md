@@ -6,16 +6,59 @@
 **非官方项目，与 Panasonic 无任何关联。** 数据来自 LUMIX Lab 公开接口，本仓库不打包、不分发任何 LUT 文件。
 
 <p align="center">
+  <img src="docs/promo/01-封面.png" width="100%" alt="LUT 搜索器" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/MangDao/LumixLutSearch/releases/latest">
+    <img src="https://img.shields.io/github/v/release/MangDao/LumixLutSearch?style=flat-square&color=00c8c8" alt="Release" />
+  </a>
+  <img src="https://img.shields.io/badge/Android-8.0%2B-00c8c8?style=flat-square" alt="Android 8.0+" />
+  <img src="https://img.shields.io/badge/dependencies-none-00c8c8?style=flat-square" alt="无第三方依赖" />
+  <img src="https://img.shields.io/badge/license-MIT-00c8c8?style=flat-square" alt="MIT" />
+</p>
+
+<p align="center">
+  <img src="docs/promo/02-功能总览.png" width="100%" alt="六个核心功能" />
+</p>
+
+---
+
+## 功能
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/promo/03-发现.png" width="100%" />
+</td>
+<td width="50%" valign="top">
+<img src="docs/promo/04-排行.png" width="100%" />
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<img src="docs/promo/05-筛选.png" width="100%" />
+</td>
+<td width="50%" valign="top">
+<img src="docs/promo/06-搜索.png" width="100%" />
+</td>
+</tr>
+</table>
+
+### 下载安装
+
+直接到 [Releases](https://github.com/MangDao/LumixLutSearch/releases/latest) 下载 APK，
+手机上允许「安装未知来源应用」即可。需要 **Android 8.0 及以上**。
+
+### 界面截图
+
+<p align="center">
   <img src="docs/screenshots/01-discover.png" width="19%" />
   <img src="docs/screenshots/02-ranking.png" width="19%" />
   <img src="docs/screenshots/03-filter-sheet.png" width="19%" />
   <img src="docs/screenshots/05-search.png" width="19%" />
   <img src="docs/screenshots/08-compare.png" width="19%" />
 </p>
-
----
-
-## 功能
 
 | | |
 |---|---|
@@ -27,6 +70,7 @@
 | **下载** | 走官方接口取 33-grid `.cube`，落盘到公共 `下载/LUMIX_LUT/` |
 | **我的下载** | 已下载列表，打开 / 分享 / 删除记录 |
 | **设置** | 自动更新频率（每次打开 / 1·3·5 天 / 1 周 / 手动）· 离线样张缓存开关 |
+
 
 ---
 
