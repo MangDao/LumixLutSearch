@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  自适应图标 . 前景层：放大镜。
+  镜片里是斜向的 原图 -> 套用 LUT 后 渐变 —— 左边冷灰、右边高饱和，
+  一眼能看出跟调色有关，不是普通搜索图标。手柄用主题青绿。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 手柄：先画，让镜环压在上面，接缝干净 -->
+    <path
+        android:pathData="M 63.99,61.94 L 85.85,85.85"
+        android:strokeColor="#00CDCD"
+        android:strokeWidth="6.68"
+        android:strokeLineCap="round" />
+
+    <!--
+      镜片：直接用圆的路径填渐变，不用 clip-path。
+      早先的写法是「整块 108x108 的方块 + clip-path 裁成圆」，
+      真机上 clip-path 没生效，方块盖住了整张图，把背景压成了一外圈环。
+      圆本身就能填渐变，根本不需要裁剪。
+    -->
+    <path android:pathData="M 45.85,43.80 m -21.13,0 a 21.13,21.13 0 1,0 42.26,0 a 21.13,21.13 0 1,0 -42.26,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="24.7"
+                android:startY="22.7"
+                android:endX="67.0"
+                android:endY="64.9">
+                    <item android:offset="0.00" android:color="#7E8898" />
+                    <item android:offset="0.42" android:color="#A8B2C4" />
+                    <item android:offset="0.44" android:color="#FF8A3E" />
+                    <item android:offset="0.68" android:color="#EC528C" />
+                    <item android:offset="1.00" android:color="#565CF0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 镜环 -->
+    <path
+        android:pathData="M 45.85,43.80 m -21.13,0 a 21.13,21.13 0 1,0 42.26,0 a 21.13,21.13 0 1,0 -42.26,0"
+        android:strokeColor="#FAFCFF"
+        android:strokeWidth="6.36"
+        android:fillColor="#00000000" />
+
+    <!-- 左上角细高光：玻璃质感（别做太重，否则像脏印子） -->
+    <path
+        android:pathData="M 27.68,46.33 a 18.17,18.17 0 0,1 27.47,-13.10"
+        android:strokeColor="#3DFFFFFF"
+        android:strokeWidth="1.27"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>
