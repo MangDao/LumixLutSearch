@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LUT 搜索器</string>
+    <string name="dl_title">我的下载</string>
+    <string name="set_title">设置</string>
+    <string name="search_title">搜索</string>
+</resources>

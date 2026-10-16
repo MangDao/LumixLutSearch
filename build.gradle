@@ -1,0 +1,8 @@
+// 根构建脚本 —— 只用 AGP，不引 Kotlin 插件（减少依赖面）
+plugins {
+    id 'com.android.application' version '8.4.0' apply false
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}

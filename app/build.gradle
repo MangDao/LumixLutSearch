@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'io.github.lumixlut.search'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "io.github.lumixlut.search"
+        minSdk 26
+        targetSdk 34
+        versionCode 7
+        versionName "2.2"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // 用 debug 签名，方便直接侧载（本工具不打算上架）
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // 不引 androidx，关掉多余检查
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+// 零第三方依赖：HTTP 用 HttpURLConnection，JSON 用内置 org.json，UI 用原生控件
+dependencies {
+}

@@ -1,0 +1,30 @@
+# 统一换行符处理。
+#
+# 没有这个文件时，Windows 上提交会把 gradlew 的 LF 转成 CRLF，
+# 而 gradlew 是 shell 脚本 —— Linux / macOS 用户 clone 后执行会直接报：
+#   bad interpreter: /bin/sh^M: no such file or directory
+# 一个公共 Android 仓库里这是硬伤，所以按扩展名钉死。
+
+# 默认：入库统一 LF，检出按平台
+* text=auto eol=lf
+
+# shell 脚本必须 LF（包括没有扩展名的 gradlew）
+gradlew   text eol=lf
+*.sh      text eol=lf
+
+# Windows 批处理必须 CRLF
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+
+# 二进制，别碰
+*.jar     binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.webp    binary
+*.apk     binary
+*.aab     binary
+*.keystore binary
+
+# Gradle 包装器属性文件里的路径不能被改写
+gradle/wrapper/gradle-wrapper.properties text eol=lf
