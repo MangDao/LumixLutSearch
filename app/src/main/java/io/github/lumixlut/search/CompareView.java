@@ -36,6 +36,10 @@ public class CompareView extends View {
     private float split = 0.5f;
     /** 按下时是否抓在把手上（决定是拖动还是跳转）。 */
     private boolean dragging = false;
+    /** 原图还在加载：只有效果图，把手以"待命"样式出现。 */
+    private boolean pendingBefore = false;
+    /** 官方压根没给原图：不画把手（画了也没得对比）。 */
+    private boolean noBefore = false;
 
     private final Paint pImg = new Paint(Paint.FILTER_BITMAP_FLAG);
     private final Paint pLine = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -44,11 +48,15 @@ public class CompareView extends View {
     private final Paint pText = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint pTextBg = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint pGlow = new Paint(Paint.ANTI_ALIAS_FLAG);
+    /** 把手里的方向箭头（纯路径，不依赖字体）。 */
+    private final Paint pArrow = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     /** 图片按比例居中后的实际绘制区域。 */
     private final RectF imgRect = new RectF();
     private final Rect clipRect = new Rect();
     private final Path clipPath = new Path();
+    /** 把手里箭头的路径，反复重置复用（onDraw 里不 new 对象）。 */
+    private final Path arrowPath = new Path();
 
     private final float dp;
 
@@ -78,6 +86,9 @@ public class CompareView extends View {
 
         pTextBg.setColor(0x99000000);
 
+        pArrow.setStyle(Paint.Style.FILL);
+        pArrow.setColor(0xFF333333);
+
         setFocusable(true);
     }
 
@@ -85,6 +96,20 @@ public class CompareView extends View {
     public void setBitmaps(Bitmap beforeBmp, Bitmap afterBmp) {
         this.before = beforeBmp;
         this.after = afterBmp;
+        invalidate();
+    }
+
+    /** 原图正在路上：把手先出现，但画成待命态（半透明 + 「原图加载中」）。 */
+    public void setPendingBefore(boolean pending) {
+        this.pendingBefore = pending;
+        if (pending) this.noBefore = false;
+        invalidate();
+    }
+
+    /** 官方没有原图：收起把手，避免"拖了没反应"。 */
+    public void setNoBefore(boolean none) {
+        this.noBefore = none;
+        if (none) this.pendingBefore = false;
         invalidate();
     }
 
@@ -123,6 +148,13 @@ public class CompareView extends View {
     protected void onDraw(Canvas cv) {
         layoutImage();
 
+        // 0) 两张都还没到：画骨架屏（灰块 + 扫光），比一片白更像"正在来"
+        if (before == null && after == null) {
+            Shimmer.draw(cv, imgRect, 8f, phase());
+            postInvalidateOnAnimation();
+            return;
+        }
+
         // 1) 整幅先画效果图
         if (after != null) {
             cv.drawBitmap(after, null, imgRect, pImg);
@@ -130,7 +162,7 @@ public class CompareView extends View {
             cv.drawBitmap(before, null, imgRect, pImg);
         }
 
-        // 2) 左半边盖原图
+        // 2) 左半边盖原图（原图没到就只画效果图，但分隔线/把手照样出现 —— 不让人干等）
         if (before != null && after != null) {
             float x = imgRect.left + imgRect.width() * split;
             clipRect.set(Math.round(imgRect.left), Math.round(imgRect.top),
@@ -142,6 +174,18 @@ public class CompareView extends View {
             cv.clipPath(clipPath);
             cv.drawBitmap(before, null, imgRect, pImg);
             cv.restore();
+        }
+        // 3) 分隔线 + 把手：图一出现就画（不等第二张）；原图没到时画成半透明待命态
+        final boolean canCompare = (before != null && after != null);
+        final boolean showHandle = canCompare || (after != null && pendingBefore && !noBefore);
+        if (showHandle) {
+            final int aGlow = pGlow.getAlpha(), aLine = pLine.getAlpha(),
+                    aKnob = pKnob.getAlpha(), aRing = pKnobRing.getAlpha();
+            if (!canCompare) {
+                pGlow.setAlpha(90); pLine.setAlpha(120);
+                pKnob.setAlpha(150); pKnobRing.setAlpha(150);
+            }
+            float x = imgRect.left + imgRect.width() * split;
 
             // 3) 分隔线 + 把手
             float cx = x;
@@ -155,27 +199,56 @@ public class CompareView extends View {
             cv.drawCircle(cx, cy, r, pKnob);
             cv.drawCircle(cx, cy, r, pKnobRing);
 
-            // 把手里的 ◀ ▶
-            Paint arrow = pText;
-            int oldColor = arrow.getColor();
-            arrow.setColor(0xFF333333);
-            arrow.setFakeBoldText(false);
-            float ts = arrow.getTextSize();
-            arrow.setTextSize(dp * 10f);
-            Paint.Align oldAlign = arrow.getTextAlign();
-            arrow.setTextAlign(Paint.Align.CENTER);
-            float ty = cy - (arrow.descent() + arrow.ascent()) / 2f;
-            cv.drawText("◀", cx - r * 0.40f, ty, arrow);
-            cv.drawText("▶", cx + r * 0.40f, ty, arrow);
-            arrow.setTextAlign(oldAlign);
-            arrow.setTextSize(ts);
-            arrow.setFakeBoldText(true);
-            arrow.setColor(oldColor);
+            // 把手里的 ‹ ›：用 Path 画三角，不再 drawText("◀"/"▶")
+            // —— 那两个字符随字体变宽变高，同一台机器换字体后把手里的箭头会一胖一瘦。
+            drawChevron(cv, cx - r * 0.40f, cy, r * 0.17f, r * 0.23f, -1);
+            drawChevron(cv, cx + r * 0.40f, cy, r * 0.17f, r * 0.23f, 1);
+
+            if (!canCompare) {
+                // 待命态提示：说明为什么拖了看不出变化
+                String t = getContext().getString(R.string.detail_before_pending);
+                Paint.Align oa = pText.getTextAlign();
+                float ats = pText.getTextSize();
+                int ac = pText.getColor();
+                pText.setTextAlign(Paint.Align.CENTER);
+                pText.setTextSize(dp * 10f);
+                pText.setColor(0xCCFFFFFF);
+                cv.drawText(t, cx, imgRect.bottom - dp * 10f, pText);
+                pText.setTextSize(ats);
+                pText.setTextAlign(oa);
+                pText.setColor(ac);
+            }
+
+            pGlow.setAlpha(aGlow); pLine.setAlpha(aLine);
+            pKnob.setAlpha(aKnob); pKnobRing.setAlpha(aRing);
         }
 
         // 4) 两侧标签
-        drawTag(cv, "原图", imgRect.left + dp * 8f, imgRect.top + dp * 8f, true);
-        drawTag(cv, "效果", imgRect.right - dp * 8f, imgRect.top + dp * 8f, false);
+        drawTag(cv, getContext().getString(R.string.detail_badge_before),
+                imgRect.left + dp * 8f, imgRect.top + dp * 8f, true);
+        drawTag(cv, getContext().getString(R.string.detail_badge_after),
+                imgRect.right - dp * 8f, imgRect.top + dp * 8f, false);
+    }
+
+    /** 骨架屏扫光进度 0..1。 */
+    private float phase() {
+        return (android.os.SystemClock.uptimeMillis() % 1100L) / 1100f;
+    }
+
+    /**
+     * 把手里的小箭头：dir = -1 朝左，+1 朝右。
+     *
+     * 不用 drawText("◀"/"▶")：那两个码位在部分字体里是"半宽/全宽"，换字体会一胖一瘦，
+     * 甚至被替换成豆腐块。这里用三个点画实心三角，尺寸只跟 dp 有关。
+     */
+    private void drawChevron(Canvas cv, float x, float y,
+                             float halfW, float halfH, int dir) {
+        arrowPath.reset();
+        arrowPath.moveTo(x - dir * halfW, y - halfH);
+        arrowPath.lineTo(x + dir * halfW, y);
+        arrowPath.lineTo(x - dir * halfW, y + halfH);
+        arrowPath.close();
+        cv.drawPath(arrowPath, pArrow);
     }
 
     /** 画一个带底衬的小标签。leftAnchor=true 时 x 是左边缘，否则是右边缘。 */
@@ -202,7 +275,7 @@ public class CompareView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        if (before == null || after == null) return false;
+        if (before == null && after == null) return false;
         float x = e.getX();
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN: {
@@ -211,6 +284,9 @@ public class CompareView extends View {
                 dragging = Math.abs(x - hx) < dp * 40f;
                 if (dragging) {
                     getParent().requestDisallowInterceptTouchEvent(true);
+                    // 抓住把手的那一下：CONTEXT_CLICK 比 tick 略沉，像"捏住"
+                    performHapticFeedback(
+                            android.view.HapticFeedbackConstants.CONTEXT_CLICK);
                 }
                 setSplit((x - imgRect.left) / Math.max(1f, imgRect.width()));
                 return true;

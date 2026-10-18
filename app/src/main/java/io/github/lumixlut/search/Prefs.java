@@ -24,12 +24,14 @@ public final class Prefs {
     public static final String FREQ_1W = "1w";
     public static final String FREQ_MANUAL = "manual"; // 手动
 
-    /** 界面上按这个顺序显示。 */
+    /**
+     * 界面上按这个顺序显示（文案在 `R.array.settings_freq_labels`）。
+     *
+     * 键留在代码里、文案进资源：键是逻辑（swhichAutoSync 要按它判断间隔），
+     * 文案是会改的东西，两者混在一张表里最容易改错行。
+     */
     public static final String[] FREQ_KEYS = {
             FREQ_OPEN, FREQ_1D, FREQ_3D, FREQ_5D, FREQ_1W, FREQ_MANUAL
-    };
-    public static final String[] FREQ_LABELS = {
-            "每次打开", "1 天", "3 天", "5 天", "1 周", "手动"
     };
 
     private static final String K_FREQ = "auto_update";
@@ -47,20 +49,24 @@ public final class Prefs {
 
     // ---------------------------------------------------------- 自动更新
 
+    /**
+     * 上次抓详情用的接口语言。语言一变（比如系统语言从英文切成中文），
+     * 已缓存的简介还是旧语言的，必须整体重抓 —— 见 MainActivity 的 doPreload。
+     */
+    public static String detailLang(Context c) {
+        return sp(c).getString("detail_lang", "");
+    }
+
+    public static void setDetailLang(Context c, String lang) {
+        sp(c).edit().putString("detail_lang", lang).apply();
+    }
+
     public static String freq(Context c) {
         return sp(c).getString(K_FREQ, FREQ_1D);
     }
 
     public static void setFreq(Context c, String key) {
         sp(c).edit().putString(K_FREQ, key).apply();
-    }
-
-    public static String freqLabel(Context c) {
-        String k = freq(c);
-        for (int i = 0; i < FREQ_KEYS.length; i++) {
-            if (FREQ_KEYS[i].equals(k)) return FREQ_LABELS[i];
-        }
-        return FREQ_LABELS[1];
     }
 
     public static long lastSync(Context c) {
@@ -101,7 +107,7 @@ public final class Prefs {
 
     public static String lastSyncText(Context c) {
         long t = lastSync(c);
-        if (t == 0L) return "从未同步";
+        if (t == 0L) return c.getString(R.string.common_never_synced);
         java.text.SimpleDateFormat f =
                 new java.text.SimpleDateFormat("MM-dd HH:mm", java.util.Locale.getDefault());
         return f.format(new java.util.Date(t));
@@ -149,7 +155,7 @@ public final class Prefs {
     // ---------------------------------------------------------- 离线样张
 
     public static boolean cacheSamples(Context c) {
-        return sp(c).getBoolean(K_CACHE, false);
+        return sp(c).getBoolean(K_CACHE, true);   // 默认开：第二次打开详情直接走本地，不再等网络
     }
 
     public static void setCacheSamples(Context c, boolean on) {
@@ -158,5 +164,80 @@ public final class Prefs {
 
     public static void markCacheRun(Context c) {
         sp(c).edit().putLong(K_CACHE_AT, System.currentTimeMillis()).apply();
+    }
+
+    // ---------------------------------------------------------- 触感
+
+    private static final String K_HAPTIC = "haptic_on";
+    private static final String K_HAPTIC_LEVEL = "haptic_level";
+
+    public static boolean hapticOn(Context c) {
+        return sp(c).getBoolean(K_HAPTIC, true);   // 默认开：触感是这轮的主要体验点
+    }
+
+    public static void setHapticOn(Context c, boolean on) {
+        sp(c).edit().putBoolean(K_HAPTIC, on).apply();
+    }
+
+    public static int hapticLevel(Context c) {
+        int v = sp(c).getInt(K_HAPTIC_LEVEL, 1);
+        return v < 0 ? 0 : (v > 2 ? 2 : v);
+    }
+
+    public static void setHapticLevel(Context c, int level) {
+        int v = level < 0 ? 0 : (level > 2 ? 2 : level);
+        sp(c).edit().putInt(K_HAPTIC_LEVEL, v).apply();
+    }
+
+    // ---------------------------------------------------------- 外观（深浅色）
+
+    /** 外观档位。系统只在 Android 12+ 提供"只改本应用"的能力（见 applyAppearance）。 */
+    public static final int LOOK_FOLLOW = 0;
+    public static final int LOOK_LIGHT = 1;
+    public static final int LOOK_DARK = 2;
+
+    private static final String K_LOOK = "appearance";
+
+    public static int appearance(Context c) {
+        int v = sp(c).getInt(K_LOOK, LOOK_FOLLOW);
+        return v < 0 ? LOOK_FOLLOW : (v > LOOK_DARK ? LOOK_DARK : v);
+    }
+
+    public static void setAppearance(Context c, int v) {
+        int k = v < 0 ? LOOK_FOLLOW : (v > LOOK_DARK ? LOOK_DARK : v);
+        sp(c).edit().putInt(K_LOOK, k).apply();
+    }
+
+    /** 本进程上一次真正下发过的档位；-1 = 还没下发过。 */
+    private static int lookApplied = -1;
+
+    /**
+     * 把外观偏好下发给系统（只在 Android 12+ 有效）。
+     *
+     * 为什么不用 `getApplicationNightMode()` 反查：那是 API 34 才有的方法，
+     * 本项目 compileSdk 34 的 android.jar 里就没有（javap 验过），所以偏好由我们自己存，
+     * 系统只负责"执行"。
+     *
+     * 每进程只下发一次（`lookApplied` 守卫）：`setApplicationNightMode` 会触发 Activity 重建，
+     * 不守卫的话每次 init 都可能再触发一次。
+     */
+    public static void applyAppearance(Context c) {
+        if (c == null || android.os.Build.VERSION.SDK_INT < 31) return;
+        final int want = appearance(c);
+        if (lookApplied == want) return;
+        lookApplied = want;
+        try {
+            android.app.UiModeManager um =
+                    (android.app.UiModeManager) c.getApplicationContext()
+                            .getSystemService(Context.UI_MODE_SERVICE);
+            if (um == null) return;
+            um.setApplicationNightMode(want == LOOK_LIGHT
+                    ? android.app.UiModeManager.MODE_NIGHT_NO
+                    : (want == LOOK_DARK
+                            ? android.app.UiModeManager.MODE_NIGHT_YES
+                            : android.app.UiModeManager.MODE_NIGHT_AUTO));
+        } catch (Throwable ignored) {
+            // 个别 ROM 没实现：忽略，界面继续按系统走
+        }
     }
 }

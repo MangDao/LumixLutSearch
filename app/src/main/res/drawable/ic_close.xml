@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  关闭 / 清空。替换原来的「✕」字符。
+
+  两条对角斜线，端点比 24 视口内缩 6.3，正好落在 45° 上；
+  round cap 让 16dp 尺寸下也保持圆头，不会像笔画顿住。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:pathData="M6.3,6.3 L17.7,17.7" />
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:pathData="M17.7,6.3 L6.3,17.7" />
+</vector>

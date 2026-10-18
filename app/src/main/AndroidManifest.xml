@@ -3,6 +3,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 触感：普通权限，安装即授予。用 Vibrator 是为了让"强度"可调（见 Ui.haptic） -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <!-- API 26~28 直接写公共 Downloads 需要；29+ 走 MediaStore 不需要 -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -20,7 +22,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
-        android:theme="@android:style/Theme.Material.Light.DarkActionBar">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".MainActivity"
@@ -35,9 +37,16 @@
 
         <!-- 我的下载：查看/分享/管理本工具下载过的 .cube -->
         <activity
+            android:name=".SongyingActivity"
+            android:label="@string/songying_title"
+            android:theme="@style/ChildTheme"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
             android:name=".DownloadsActivity"
             android:exported="false"
             android:label="@string/dl_title"
+            android:theme="@style/ChildTheme"
             android:parentActivityName=".MainActivity" />
 
         <!-- 设置：自动更新频率 + 离线样张缓存 -->
@@ -45,13 +54,16 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:label="@string/set_title"
+            android:theme="@style/ChildTheme"
             android:parentActivityName=".MainActivity" />
 
         <!-- 搜索：历史 / 热词 / 分组结果；选中后把 code 回传主界面 -->
+        <!-- 搜索页用自己的「← + 输入框 + 搜索」顶栏，所以套 AppTheme（无 ActionBar），避免出现两条返回栏 -->
         <activity
             android:name=".SearchActivity"
             android:exported="false"
             android:label="@string/search_title"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity" />
 

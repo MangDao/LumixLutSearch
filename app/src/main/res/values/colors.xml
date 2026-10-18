@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  全 app 唯一配色真源（v3 精修）。
+  这轮把色阶往"低饱和中性 + 单点强调"调：底色更冷、分隔线更淡、
+  强调色收敛到单点强调。2026-10-17 又把强调色从 #0FA3A3 压到 #088080：
+  前者在白底上只有 3.09:1（正文级不合格），后者 4.76:1 达标。
+-->
+<resources>
+    <!-- 面 -->
+    <color name="bg">#FFF6F7F9</color>
+    <color name="card">#FFFFFFFF</color>
+    <color name="card_press">#0F0F1419</color>
+
+    <!-- 字 -->
+    <color name="text">#FF10141A</color>
+    <color name="text_sub">#FF6B7280</color>
+    <color name="text_weak">#FFA3AAB4</color>
+
+    <!-- 线与强调 -->
+    <color name="line">#FFECEEF1</color>
+    <!-- 强调色：白底对比度 4.76:1（原 #0FA3A3 只有 3.09:1，正文级不合格）。
+         深色主题另有取值（values-night 的 #3FC9C9，深底上 8.48:1），别把这里改成深色那套。 -->
+    <color name="accent">#FF088080</color>
+    <color name="accent_soft">#1A088080</color>
+    <color name="chip_bg">#FFF2F4F6</color>
+    <color name="rank_top">#FFF97316</color>
+    <color name="rank_n">#FF9AA3AE</color>
+    <color name="scrim">#66000000</color>
+    <!-- 危险操作（删除）文字色，只在动作标签上用，不做大面积背景 -->
+    <color name="danger">#FFE5484D</color>
+
+    <!-- 骨架屏：底块 + 扫光（暗色主题下会换一套，见 values-night/colors.xml） -->
+    <color name="skeleton">#FFECEFF3</color>
+    <color name="skeleton_shine">#CCFFFFFF</color>
+
+    <!-- 底部弹层的抓手 -->
+    <color name="handle">#FFD8DBE0</color>
+
+    <!-- 分段控件「选中块」的底。浅色主题是纯白（浮在灰轨道上），
+         暗色主题必须反过来比轨道更亮，否则"选中"看着像凹进去 —— 见 values-night。 -->
+    <color name="seg_on">#FFFFFFFF</color>
+    <!-- 25 周年专栏标题：金色是它的"身份色"，与其他小节的青绿竖条并存 -->
+    <color name="gold_title">#FF8A6A1F</color>
+    <color name="gold_rule">#33C79A3F</color>
+    <!-- 强调色（ACCENT）上的前景色：浅色主题是白字，深色主题的青色很亮、必须反过来用深字 -->
+    <color name="on_accent">#FFFFFFFF</color>
+</resources>

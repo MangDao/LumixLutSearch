@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  放大镜。替换原来的「🔍」字符。
+
+  【为什么图标不能再用字符】
+  🔍 这类字符归 emoji 字体管，用户手机装了第三方衬线字体后，字符会被替换、
+  被画成豆腐块、或者宽度对不上导致整行基线错位。矢量图跟字体无关。
+
+  【画法】
+  24×24 视口，纯描边（lineCap/Join 都是 round），颜色由 Ui.icon() 在运行时
+  setImageTintList 上色 —— 所以这里写死 #FF000000 只是"占位"，不参与配色。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- 镜圈：圆心 (10.6,10.6) r=6.7，用两段相对圆弧闭合 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M10.6,3.9 a6.7,6.7 0 1,1 0,13.4 a6.7,6.7 0 1,1 0,-13.4" />
+
+    <!-- 镜柄：从圆上 45° 处向外，短一截才不像"钉子" -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:pathData="M15.4,15.4 L20.2,20.2" />
+</vector>

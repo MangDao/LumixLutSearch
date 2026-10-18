@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  暗色主题（values-night）。
+
+  ⚠️ 这里必须把两个主题的 item 写全：资源覆盖是"整份替换"，
+  不会和 values/styles.xml 合并 —— 少写一条就丢一条（比如 colorAccent）。
+
+  与浅色版的差别只有三处：
+    1. 父主题换成 Material 的深色版，让平台控件（Spinner 下拉、CheckBox、ActionBar）跟着变深；
+    2. windowLightStatusBar / windowLightNavigationBar 关掉 → 状态栏图标变白；
+    3. ActionBar 用 @color/bg（深）而不是浅色底。
+-->
+<resources>
+
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <!-- 按钮底：平台深色主题默认是 #5A595B，配浅字只有 ~3:1，看着像 disabled；
+             换成 chip_bg（比页面底亮一档）才一眼看出"这是能点的" -->
+        <item name="android:colorButtonNormal">@color/chip_bg</item>
+        <item name="android:colorControlHighlight">@color/card_press</item>
+    </style>
+
+    <style name="ChildTheme" parent="@android:style/Theme.Material">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorPrimary">@color/bg</item>
+        <item name="android:colorPrimaryDark">@color/bg</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:colorButtonNormal">@color/chip_bg</item>
+        <item name="android:colorControlHighlight">@color/card_press</item>
+    </style>
+
+
+</resources>

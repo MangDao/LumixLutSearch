@@ -108,10 +108,13 @@ public class LutCardAdapter extends BaseAdapter {
         mp.topMargin = dp(3);
         col.addView(h.meta, mp);
 
-        h.dl = Ui.text(ctx, "", 11.5f, Ui.ACCENT, true);
+        // 下载量：图标 + 数字。图标在 create() 里建一次，bind() 只改数字 ——
+        // 列表复用时不重建视图，也不会每滚一屏就新建一个 ImageView。
+        LinearLayout dlRow = Ui.stat(ctx, R.drawable.ic_download, "", 11.5f, Ui.ACCENT, true);
+        h.dl = Ui.statLabel(dlRow);
         LinearLayout.LayoutParams dp2 = Ui.lpMatch();
         dp2.topMargin = dp(3);
-        col.addView(h.dl, dp2);
+        col.addView(dlRow, dp2);
 
         row.addView(col, Ui.lpWeight(1f));
         root.addView(row, Ui.lpMatch());
@@ -132,7 +135,7 @@ public class LutCardAdapter extends BaseAdapter {
         if (!l.photoStyle.isEmpty()) sb.append("  ·  ").append(l.photoStyle);
         if (!l.countryCode.isEmpty()) sb.append("  ·  ").append(l.countryCode);
         h.meta.setText(sb.toString());
-        h.dl.setText("↓ " + Ui.num(l.downloads));
+        if (h.dl != null) h.dl.setText(Ui.num(l.downloads));
 
         h.thumb.setImageDrawable(null);
         final String path = l.thumbAfter.isEmpty() ? l.thumbPath : l.thumbAfter;

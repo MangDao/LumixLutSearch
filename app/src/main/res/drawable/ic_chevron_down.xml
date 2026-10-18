@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  向下箭头。替换「展开 ▼」「收起 ▲」「筛选条件 ▾」这三处的三角字符。
+
+  【为什么只要一个方向】
+  收起态 = 尖朝下；展开后把它 setRotation(180) 就变成朝上，还带 180ms 补间。
+  两个方向各存一份容易出现"改了一份忘了另一份"的不一致。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M5.4,9.4 L12,16.2 L18.6,9.4" />
+</vector>

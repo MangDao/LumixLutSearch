@@ -37,12 +37,13 @@ public class DownloadsActivity extends Activity {
 
     private Store store;
     private final List<Store.Dl> items = new ArrayList<>();
-    private ArrayAdapter<Store.Dl> adapter;
+    private android.widget.BaseAdapter adapter;
     private TextView header;
 
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
+        Ui.init(this);
         store = new Store(this);
         setContentView(buildUi());
         reload();
@@ -53,64 +54,51 @@ public class DownloadsActivity extends Activity {
     }
 
     private View buildUi() {
+        // 页名由 ActionBar 显示，这里不再重复画标题
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-
-        TextView title = new TextView(this);
-        title.setText("我的下载");
-        title.setTextSize(19f);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setPadding(dp(18), dp(16), dp(18), dp(6));
-        root.addView(title);
+        root.setPadding(0, dp(8), 0, 0);
 
         header = new TextView(this);
         header.setTextSize(12f);
         header.setPadding(dp(18), 0, dp(18), dp(10));
         root.addView(header);
 
-        // 刷新 / 全部删除
-        LinearLayout bar = new LinearLayout(this);
-        bar.setOrientation(LinearLayout.HORIZONTAL);
-        bar.setPadding(dp(18), 0, dp(18), dp(10));
+        // 刷新 / 打开文件夹 / 清空：换成与主界面一致的按钮样式（原来是系统灰按钮，跟全局不搭）
+        LinearLayout bar = Ui.row(this);
+        bar.setPadding(dp(16), 0, dp(16), dp(12));
 
-        Button bRefresh = new Button(this);
-        bRefresh.setText("刷新");
+        TextView bRefresh = Ui.ghostBtn(this, getString(R.string.dlpage_refresh));
+        TextView bOpenDir = Ui.ghostBtn(this, getString(R.string.dlpage_open_dir));
+        TextView bClear = Ui.ghostBtn(this, getString(R.string.dlpage_clear));
+        bClear.setTextColor(getColor(R.color.danger));
+
+        TextView[] btns = {bRefresh, bOpenDir, bClear};
+        for (int i = 0; i < btns.length; i++) {
+            final TextView b = btns[i];
+            b.setBackground(Ui.rippleCard(this, Ui.R_BTN, Ui.LINE));
+            LinearLayout.LayoutParams p = Ui.lpWeight(1f);
+            if (i > 0) p.leftMargin = dp(8);
+            bar.addView(b, p);
+        }
         bRefresh.setOnClickListener(v -> reload());
-
-        Button bOpenDir = new Button(this);
-        bOpenDir.setText("打开文件夹");
         bOpenDir.setOnClickListener(v -> openFolder());
-
-        Button bClear = new Button(this);
-        bClear.setText("清空记录");
         bClear.setOnClickListener(v -> confirmClear());
-
-        bar.addView(bRefresh, weight());
-        bar.addView(bOpenDir, weight());
-        bar.addView(bClear, weight());
         root.addView(bar);
 
         ListView list = new ListView(this);
-        adapter = new ArrayAdapter<Store.Dl>(this,
-                android.R.layout.simple_list_item_2, android.R.id.text1, items) {
-            @Override
-            public View getView(int pos, View cv, ViewGroup parent) {
-                View v = super.getView(pos, cv, parent);
-                TextView t1 = v.findViewById(android.R.id.text1);
-                TextView t2 = v.findViewById(android.R.id.text2);
-                Store.Dl d = getItem(pos);
-                if (d != null && t1 != null && t2 != null) {
-                    t1.setText(d.line1());
-                    t1.setTypeface(null, Typeface.BOLD);
-
-                    StringBuilder sb = new StringBuilder(d.line2());
-                    SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
-                    sb.append("  ·  ").append(f.format(new Date(d.savedAt)));
-                    if (!fileExists(d)) sb.append("  ·  ⚠ 文件已不在");
-                    t2.setText(sb.toString());
-                    t2.setTextSize(11f);
-                }
-                return v;
+        list.setDivider(null);
+        list.setDividerHeight(0);
+        list.setPadding(dp(12), 0, dp(12), 0);
+        list.setClipToPadding(false);
+        adapter = new android.widget.BaseAdapter() {
+            @Override public int getCount() { return items.size(); }
+            @Override public Object getItem(int i) { return items.get(i); }
+            @Override public long getItemId(int i) { return i; }
+            @Override public View getView(int pos, View cv, ViewGroup parent) {
+                LinearLayout row = (cv instanceof LinearLayout) ? (LinearLayout) cv : buildRow();
+                bindRow(row, items.get(pos));
+                return row;
             }
         };
         list.setAdapter(adapter);
@@ -121,9 +109,7 @@ public class DownloadsActivity extends Activity {
         TextView foot = new TextView(this);
         foot.setTextSize(10f);
         foot.setPadding(dp(18), dp(6), dp(18), dp(12));
-        foot.setText("文件保存在公共「下载/" + Downloader.OUT_DIR + "/」，"
-                + "任何文件管理器都能看到。\n"
-                + "导入 LUMIX Lab：LUT库 → 设备 → 导入LUT → 选这里的文件。");
+        foot.setText(getString(R.string.dlpage_foot_fmt, Downloader.OUT_DIR));
         root.addView(foot);
 
         return root;
@@ -143,17 +129,21 @@ public class DownloadsActivity extends Activity {
 
         int missing = 0;
         for (Store.Dl d : items) if (!fileExists(d)) missing++;
-        StringBuilder sb = new StringBuilder();
-        sb.append("共 ").append(items.size()).append(" 枚");
-        if (missing > 0) sb.append("，其中 ").append(missing).append(" 枚文件已不在");
+        StringBuilder sb = new StringBuilder(getString(R.string.dlpage_count_fmt, items.size()));
+        if (missing > 0) sb.append(getString(R.string.dlpage_missing_fmt, missing));
         header.setText(sb.toString());
     }
 
     /**
      * 记录里的文件还在不在。
      *
-     * 优先按 URI 探（content:// 走 ContentResolver，file:// 直接看 File），
-     * URI 空或探不动就退回看 display_path —— 探不动时返回 true（宁可少报警）。
+     * 优先按 URI 探（content:// 走 ContentResolver，file:// 直接看 File）；
+     * 探不动（未知 scheme / 抛异常）返回 true —— 宁可少报警，不要把好的记录标成丢失。
+     *
+     * **URI 为空时必须退回看 display_path**。`recordDownload` 在 uri 拿不到时会存空串
+     * （MediaStore 插入失败的机型就会出现），这种记录如果直接 return true，
+     * 文件删掉后它永远显示正常、页头「其中 N 枚文件已不在」也会少报
+     * —— 2026-10-18 用假记录验非空路径时发现的。
      */
     private boolean fileExists(Store.Dl d) {
         try {
@@ -167,76 +157,173 @@ public class DownloadsActivity extends Activity {
                 } else if ("file".equals(u.getScheme())) {
                     return new java.io.File(u.getPath()).exists();
                 }
-                return true;
+                return true;                       // 未知 scheme：判不了，按"在"处理
             }
         } catch (Exception e) {
             return true;
         }
-        return true;
+        // uri 为空：退回看落盘路径；路径也没有就判不了，按"在"处理
+        return d.displayPath.isEmpty() || new java.io.File(d.displayPath).exists();
     }
 
     private void showActions(final Store.Dl d) {
         new AlertDialog.Builder(this)
                 .setTitle(d.cubeName)
                 .setMessage(d.line2() + "\n\n"
-                        + "位置：" + (d.displayPath.isEmpty() ? "（未记录）" : d.displayPath)
-                        + "\n对应 LUT：" + (d.title.isEmpty() ? d.code : d.title)
-                        + "\ncode：" + d.code)
-                .setPositiveButton("打开", (x, w) -> doOpen(d))
-                .setNeutralButton("分享", (x, w) -> doShare(d))
-                .setNegativeButton("删除记录", (x, w) -> confirmDelete(d))
+                        + getString(R.string.dlpage_actions_path_fmt,
+                                d.displayPath.isEmpty()
+                                        ? getString(R.string.dlpage_path_unknown) : d.displayPath)
+                        + getString(R.string.dlpage_actions_lut_fmt,
+                                d.title.isEmpty() ? d.code : d.title))
+                .setPositiveButton(getString(R.string.dlpage_open), (x, w) -> doOpen(d))
+                .setNeutralButton(getString(R.string.dlpage_share), (x, w) -> doShare(d))
+                .setNegativeButton(getString(R.string.dlpage_delete_ellipsis),
+                        (x, w) -> confirmDelete(d))
                 .show();
     }
 
+    /** 一行下载记录：白卡 + 水波纹，右侧一个「删除」。 */
+    private LinearLayout buildRow() {
+        LinearLayout row = Ui.row(this);
+        row.setBackground(Ui.rippleCard(this, 14f, Ui.LINE));
+        row.setElevation(dp(1f));
+        row.setPadding(dp(14), dp(12), dp(8), dp(12));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lp.bottomMargin = dp(8);
+        row.setLayoutParams(lp);
+
+        LinearLayout mid = Ui.col(this);
+        TextView t1 = new TextView(this);
+        t1.setId(android.R.id.text1);
+        t1.setTextSize(14f);
+        t1.setTypeface(Ui.medium());
+        t1.setTextColor(Ui.TEXT);
+        mid.addView(t1);
+
+        TextView t2 = new TextView(this);
+        t2.setId(android.R.id.text2);
+        t2.setTextSize(11f);
+        t2.setTextColor(Ui.TEXT_SUB);
+        LinearLayout.LayoutParams t2p = Ui.lpMatch();
+        t2p.topMargin = dp(3);
+        mid.addView(t2, t2p);
+        row.addView(mid, Ui.lpWeight(1f));
+
+        TextView del = new TextView(this);
+        del.setId(android.R.id.button1);
+        del.setText(getString(R.string.common_delete));
+        del.setTextSize(12.5f);
+        del.setTextColor(getColor(R.color.danger));
+        del.setTypeface(Ui.medium());
+        del.setGravity(Gravity.CENTER);
+        del.setPadding(dp(14), dp(12), dp(14), dp(12));   // ≥48dp 触控
+        row.addView(del, Ui.lpWrap());
+        return row;
+    }
+
+    private void bindRow(final LinearLayout row, final Store.Dl d) {
+        TextView t1 = row.findViewById(android.R.id.text1);
+        TextView t2 = row.findViewById(android.R.id.text2);
+        TextView del = row.findViewById(android.R.id.button1);
+        t1.setText(d.line1());
+        StringBuilder sb = new StringBuilder(d.line2());
+        SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
+        sb.append("  ·  ").append(f.format(new Date(d.savedAt)));
+        if (!fileExists(d)) sb.append(getString(R.string.dlpage_row_missing));
+        t2.setText(sb.toString());
+        if (del != null) del.setOnClickListener(v -> confirmDelete(d));
+    }
+
+    /**
+     * 删掉记录对应的 .cube 文件。
+     *
+     * 顺序：先按 MediaStore/content URI 删（我们自己是 owner，通常能删掉）；
+     * 失败再按 display_path 直接 File.delete()（≤28 有权限，29+ 可能被 scoped storage 拒绝）。
+     * 返回是否真的删掉了文件；删不掉不影响删记录。
+     */
+    private boolean deleteFile(Store.Dl d) {
+        boolean ok = false;
+        if (!d.uri.isEmpty()) {
+            Uri u = Uri.parse(d.uri);
+            try {
+                if ("content".equals(u.getScheme())) {
+                    ok = getContentResolver().delete(u, null, null) > 0;
+                }
+            } catch (SecurityException ignored) {
+                // 不是本应用创建的文件，系统会要求额外的用户确认；这里退回按路径删
+            } catch (Exception ignored) { }
+            if (!ok && "file".equals(u.getScheme()) && u.getPath() != null) {
+                ok = new java.io.File(u.getPath()).delete();
+            }
+        }
+        if (!ok && !d.displayPath.isEmpty()) {
+            try { ok = new java.io.File(d.displayPath).delete(); } catch (Exception ignored) { }
+        }
+        return ok;
+    }
+
     private void doOpen(Store.Dl d) {
-        if (d.uri.isEmpty()) { toast("这条记录没有可用路径"); return; }
+        if (d.uri.isEmpty()) { toast(getString(R.string.dlpage_no_path)); return; }
         Uri u = Uri.parse(d.uri);
         if (Downloader.tryOpenWith(this, u, "application/octet-stream")) return;
-        toast("系统里没有能打开 .cube 的应用 —— 用文件管理器打开「下载/"
-                + Downloader.OUT_DIR + "/」即可");
+        toast(getString(R.string.dlpage_no_opener_fmt, Downloader.OUT_DIR));
     }
 
     private void doShare(Store.Dl d) {
-        if (d.uri.isEmpty()) { toast("这条记录没有可用路径"); return; }
+        if (d.uri.isEmpty()) { toast(getString(R.string.dlpage_no_path)); return; }
         try {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("application/octet-stream");
             i.putExtra(Intent.EXTRA_STREAM, Uri.parse(d.uri));
             i.putExtra(Intent.EXTRA_SUBJECT, d.cubeName);
             i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(Intent.createChooser(i, "分享 " + d.cubeName));
+            startActivity(Intent.createChooser(i,
+                    getString(R.string.dlpage_share_chooser_fmt, d.cubeName)));
         } catch (Exception e) {
-            toast("分享失败：" + e.getMessage());
+            toast(getString(R.string.dlpage_share_failed_fmt, String.valueOf(e.getMessage())));
         }
     }
 
     private void confirmDelete(final Store.Dl d) {
         new AlertDialog.Builder(this)
-                .setTitle("删除记录")
-                .setMessage("只从本页移除这条记录。\n\n"
-                        + "「下载/" + Downloader.OUT_DIR + "/" + d.cubeName + "」"
-                        + "本身不会被删 —— 那在公共下载目录，需要你自己在文件管理器里处理。")
-                .setPositiveButton("删除记录", (x, w) -> {
+                .setTitle(getString(R.string.dlpage_delete_title))
+                .setMessage(getString(R.string.dlpage_delete_message_fmt, d.cubeName))
+                .setPositiveButton(getString(R.string.dlpage_delete_both), (x, w) -> {
+                    boolean ok = deleteFile(d);
                     store.removeDownload(d.code);
                     reload();
-                    toast("已移除记录");
+                    toast(getString(ok
+                            ? R.string.dlpage_deleted_both
+                            : R.string.dlpage_delete_file_failed));
                 })
-                .setNegativeButton("取消", null)
+                .setNeutralButton(getString(R.string.dlpage_delete_record_only), (x, w) -> {
+                    store.removeDownload(d.code);
+                    reload();
+                    toast(getString(R.string.dlpage_deleted_record_only));
+                })
+                .setNegativeButton(getString(R.string.common_cancel), null)
                 .show();
     }
 
     private void confirmClear() {
-        if (items.isEmpty()) { toast("记录已经是空的"); return; }
+        if (items.isEmpty()) { toast(getString(R.string.dlpage_already_empty)); return; }
         new AlertDialog.Builder(this)
-                .setTitle("清空记录")
-                .setMessage("只清空本页的 " + items.size() + " 条记录，"
-                        + "不会删除任何 .cube 文件。")
-                .setPositiveButton("清空", (x, w) -> {
+                .setTitle(getString(R.string.dlpage_clear_title))
+                .setMessage(getString(R.string.dlpage_clear_message_fmt, items.size()))
+                .setPositiveButton(getString(R.string.dlpage_clear_both), (x, w) -> {
+                    int n = 0;
+                    for (Store.Dl d : items) if (deleteFile(d)) n++;
                     store.clearDownloads();
                     reload();
-                    toast("已清空记录");
+                    toast(getString(R.string.dlpage_cleared_with_files_fmt, n));
                 })
-                .setNegativeButton("取消", null)
+                .setNeutralButton(getString(R.string.dlpage_clear_records), (x, w) -> {
+                    store.clearDownloads();
+                    reload();
+                    toast(getString(R.string.dlpage_cleared_keep_files));
+                })
+                .setNegativeButton(getString(R.string.common_cancel), null)
                 .show();
     }
 
@@ -254,8 +341,7 @@ public class DownloadsActivity extends Activity {
                 try { startActivity(i); return; } catch (Exception ignored) { }
             }
         }
-        toast("没有文件管理器能直接打开这个目录。\n路径：下载/"
-                + Downloader.OUT_DIR + "/");
+        toast(getString(R.string.dlpage_no_file_manager_fmt, Downloader.OUT_DIR));
     }
 
     private void toast(String s) {

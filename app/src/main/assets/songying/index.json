@@ -1,0 +1,1256 @@
+[
+ {
+  "id": "113_01",
+  "cat": "25周年专属",
+  "title": "AgfaPhoto LeBox",
+  "author": "兔小呆 TXD",
+  "preview": "/uploadfiles/2026/03/微信图片_20260325164720.png",
+  "files": [
+   {
+    "name": "agfaphoto_lebox.cube",
+    "bytes": 970617
+   }
+  ],
+  "nameEn": "agfaphoto_lebox",
+  "nameEnShort": "agfaphoto_lebox_tuxiaodai_txd",
+  "authorDisplay": "兔小呆",
+  "assetId": "113_01",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 s T D | 基 于 S T D | 基 于 S T D | ] 7 V | 基 于 S T D | 基 于 S T D | 基 于 S T D",
+  "desc": "爱克发一次性胶片模拟 \r\n整体色调偏冷，带有轻微的青蓝倾向，尤其在高光和阴影处表现明显，能让画面显得干净、冷静。 色彩倾向，对蓝色和绿色的还原更突出，红色和橙色则相对柔和，不会过于艳丽，整体呈现出一种 “褪色复古感”。 在自然光下肤色偏冷白，用闪光灯时会略微偏暖，带有胶片特有的柔焦质感。对比度中等偏高，高光部分容易轻微过曝，暗部则会保留一定细节但偏冷，整体影调偏 “硬”，适合表现街头、城市的硬朗感。颗粒偏重，建议机内打开颗粒拍摄。"
+ },
+ {
+  "id": "113_02",
+  "cat": "25周年专属",
+  "title": "千禧回声",
+  "author": "德松Desong",
+  "preview": "/uploadfiles/2026/03/微信图片_20260325164723.png",
+  "files": [
+   {
+    "name": "millennium_echo_cool.cube",
+    "zip": "c5903c4c33ba980117f5ed7804e28b0f_d6a53ab957237e7ab2560511637a42ce_8.cube",
+    "bytes": 970384,
+    "variant": "COOL"
+   },
+   {
+    "name": "millennium_echo_warm.cube",
+    "zip": "73ec0931880d84bd8a73754ec6acb212_1f57406f3aa403dcec575ad7a39d635f_8.cube",
+    "bytes": 962389,
+    "variant": "WARM"
+   }
+  ],
+  "nameEn": "millennium_echo",
+  "nameEnShort": "millennium_echo_desong",
+  "authorDisplay": "德松",
+  "assetId": "113_02",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S T D | 基 于 S T D | 基 于 S T D | 基 于 S T D",
+  "variant": "COOL",
+  "desc": "此预设以Lumix CCD相机的成像风格为灵感，提炼优化了其色彩特征并赋予画面独特的千禧年复古质感。通过压缩高光和阴影，呈现出对比度中等偏低的影调，同时模拟CCD带着些许高光溢出的早期数码特有的明快感。在光线充足的情况下表现最佳，在光线不足或开启闪光灯的情况下也能保证肤色白皙透红。对日常记录、人像写真、复古街拍及 Y2K 风格等多种场景都有很好的适用度。\r\n预设提供“warm“和”cold“两种色温偏向的版本，可以依据喜好与拍摄场景做选择。"
+ },
+ {
+  "id": "113_03",
+  "cat": "25周年专属",
+  "title": "千禧回声",
+  "author": "德松Desong",
+  "preview": "/uploadfiles/2026/03/微信图片_20260325164707.jpg",
+  "files": [
+   {
+    "name": "millennium_echo_cool.cube",
+    "zip": "c5903c4c33ba980117f5ed7804e28b0f_d6a53ab957237e7ab2560511637a42ce_8.cube",
+    "bytes": 970384,
+    "variant": "COOL"
+   },
+   {
+    "name": "millennium_echo_warm.cube",
+    "zip": "73ec0931880d84bd8a73754ec6acb212_1f57406f3aa403dcec575ad7a39d635f_8.cube",
+    "bytes": 962389,
+    "variant": "WARM"
+   }
+  ],
+  "nameEn": "millennium_echo",
+  "nameEnShort": "millennium_echo_desong",
+  "authorDisplay": "德松",
+  "assetId": "113_03",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S T D | 基 于 S T D | 基 于 S T D | 基 于 S T D",
+  "variant": "WARM",
+  "desc": "此预设以Lumix CCD相机的成像风格为灵感，提炼优化了其色彩特征并赋予画面独特的千禧年复古质感。在模仿CCD影调色调的同时不降低画质。通过压缩高光和阴影，呈现出对比度中等偏低的影调，同时模拟CCD带着些许高光溢出的早期数码特有的明快感。在光线充足的情况下表现最佳，在光线不足或开启闪光灯的情况下也能保证肤色白皙透红。对日常记录、人像写真、复古街拍及 Y2K 风格等多种场景都有很好的适用度。\r\n预设提供“warm“和”cold“两种色温偏向的版本，可以依据喜好与拍摄场景做选择。"
+ },
+ {
+  "id": "113_04",
+  "cat": "25周年专属",
+  "title": "y2000",
+  "author": "plady",
+  "preview": "/uploadfiles/2026/03/组 1.png",
+  "files": [
+   {
+    "name": "y2k.cube",
+    "bytes": 970518
+   }
+  ],
+  "nameEn": "y2k",
+  "nameEnShort": "y2k_plady",
+  "authorDisplay": "plady",
+  "assetId": "113_04",
+  "base": "标准",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准",
+  "desc": "参考早期 CCD 数码相机的成像风格，整体色调偏青，并在高光中加入轻微暖色，使画面在保持清透感的同时带有自然的阳光温度。高光略带溢出，暗部适度压缩，呈现出典型的 CCD 层次与色彩表现。搭配机内彩色颗粒直出效果更佳，特别适合阳光环境与黄昏时段的人像拍摄，可营造出温暖而带青调的复古数码质感。"
+ },
+ {
+  "id": "32_01",
+  "cat": "人像",
+  "title": "雪天人像",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709161834838.jpg",
+  "files": [
+   {
+    "name": "snow_portrait.cube",
+    "bytes": 765873
+   }
+  ],
+  "nameEn": "snow_portrait",
+  "nameEnShort": "snow_portrait_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "32_01",
+  "base": "V-Log",
+  "baseSrc": "visual",
+  "baseOcr": "基 于 \\/-\\og 冂 | æ\\/-log | 基 于 V-Iog",
+  "desc": "适用雪天人像，整体色调清冷干净的同时又保证肤色透亮"
+ },
+ {
+  "id": "32_02",
+  "cat": "人像",
+  "title": "治愈光影",
+  "author": "张恒",
+  "preview": "/uploadfiles/2026/07/微信图片_20260710143703.png",
+  "files": [
+   {
+    "name": "healing_light.cube",
+    "bytes": 971837
+   }
+  ],
+  "nameEn": "healing_light",
+  "nameEnShort": "healing_light_zhangheng",
+  "authorDisplay": "张恒",
+  "assetId": "32_02",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 因 oq 氨 | 《 基 于 \\/ 刁 og | 基 于 \\/ № g 卟 | 基 于 V-Iog 下 《 | 基 于 V-log",
+  "desc": "如同一缕柔和的阳光，为影像带来温暖而宁静的色调"
+ },
+ {
+  "id": "32_03",
+  "cat": "人像",
+  "title": "海边夕阳",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709161902757.jpg",
+  "files": [
+   {
+    "name": "seaside_sunset.cube",
+    "bytes": 957295
+   }
+  ],
+  "nameEn": "seaside_sunset",
+  "nameEnShort": "seaside_sunset_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "32_03",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "一 基 于 v-log 一 | 基 于 V-log | 基 于 \\/-log | 基 于 V-Iog | 基 于 V-log | 生 于 v 一",
+  "desc": "冷暖对比更大，在冷暖上做除了不同效果"
+ },
+ {
+  "id": "32_04_cool",
+  "cat": "人像",
+  "title": "冷暖色调",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162027993.jpg",
+  "files": [
+   {
+    "name": "warm_cool_tone_cool.cube",
+    "bytes": 7446695
+   }
+  ],
+  "nameEn": "warm_cool_tone",
+  "nameEnShort": "warm_cool_tone_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_04",
+  "variant": "COOL",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-log | 基 于 v-log | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "对室内光源作出了冷暖不同色调，人物看着更加自然"
+ },
+ {
+  "id": "32_04_warm",
+  "cat": "人像",
+  "title": "冷暖色调",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162027993.jpg",
+  "files": [
+   {
+    "name": "warm_cool_tone_warm.cube",
+    "bytes": 6573056
+   }
+  ],
+  "nameEn": "warm_cool_tone",
+  "nameEnShort": "warm_cool_tone_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_04",
+  "variant": "WARM",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-log | 基 于 v-log | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "对室内光源作出了冷暖不同色调，人物看着更加自然"
+ },
+ {
+  "id": "32_05_cool",
+  "cat": "人像",
+  "title": "青橙色调",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162044211.jpg",
+  "files": [
+   {
+    "name": "teal_orange_cool.cube",
+    "bytes": 5464225
+   }
+  ],
+  "nameEn": "teal_orange",
+  "nameEnShort": "teal_orange_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_05",
+  "variant": "COOL",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 基 于 V-log | 基 于 v-log | 基 于 \\/-log | 基 于 V-Iog",
+  "desc": "多半用于夜景的拍摄，不同灯光下有适度的冷暖和色偏"
+ },
+ {
+  "id": "32_05_warm",
+  "cat": "人像",
+  "title": "青橙色调",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162044211.jpg",
+  "files": [
+   {
+    "name": "teal_orange_warm.cube",
+    "bytes": 5361857
+   }
+  ],
+  "nameEn": "teal_orange",
+  "nameEnShort": "teal_orange_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_05",
+  "variant": "WARM",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 基 于 V-log | 基 于 v-log | 基 于 \\/-log | 基 于 V-Iog",
+  "desc": "多半用于夜景的拍摄，不同灯光下有适度的冷暖和色偏"
+ },
+ {
+  "id": "32_06_cool",
+  "cat": "人像",
+  "title": "高低对比度",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162104814.jpg",
+  "files": [
+   {
+    "name": "high_low_contrast_cool.cube",
+    "bytes": 7131092
+   }
+  ],
+  "nameEn": "high_low_contrast",
+  "nameEnShort": "high_low_contrast_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_06",
+  "variant": "COOL",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-log | 基 于 V-Iog 一 | 基 于 v-log | 基 于 \\/-log | 基 于 V-log",
+  "desc": "统一光比和室外早中晚不同的阳光色温"
+ },
+ {
+  "id": "32_06_warm",
+  "cat": "人像",
+  "title": "高低对比度",
+  "author": "薛璐瑶",
+  "preview": "/uploadfiles/2024/07/20240709162104814.jpg",
+  "files": [
+   {
+    "name": "high_low_contrast_warm.cube",
+    "bytes": 6907067
+   }
+  ],
+  "nameEn": "high_low_contrast",
+  "nameEnShort": "high_low_contrast_xueluyao",
+  "authorDisplay": "薛璐瑶",
+  "assetId": "32_06",
+  "variant": "WARM",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-log | 基 于 V-Iog 一 | 基 于 v-log | 基 于 \\/-log | 基 于 V-log",
+  "desc": "统一光比和室外早中晚不同的阳光色温"
+ },
+ {
+  "id": "32_07",
+  "cat": "人像",
+  "title": "春意人像",
+  "author": "波子Booz",
+  "preview": "/uploadfiles/2024/07/20240709162130684.jpg",
+  "files": [
+   {
+    "name": "spring_portrait_v1.cube",
+    "bytes": 723080
+   },
+   {
+    "name": "spring_portrait_v2.vlt",
+    "bytes": 63599
+   }
+  ],
+  "nameEn": "spring_portrait",
+  "nameEnShort": "spring_portrait_booz",
+  "authorDisplay": "波子",
+  "assetId": "32_07",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "一 基 于 v-log 囗 | 基 于 V-log | 一 基 于 v-loq 囗 | 基 于 V-Iog | 0 | 基 于 V-log | 生 于 v 一 ． 0",
+  "desc": "影调柔和反差低，人物肤色友好，适合阴天拍摄呈现清冷"
+ },
+ {
+  "id": "32_08",
+  "cat": "人像",
+  "title": "森绿清冷",
+  "author": "波子Booz",
+  "preview": "/uploadfiles/2024/07/20240709162154411.jpg",
+  "files": [
+   {
+    "name": "forest_green_cool_v1.cube",
+    "bytes": 948195
+   },
+   {
+    "name": "forest_green_cool_v2.vlt",
+    "bytes": 69928
+   }
+  ],
+  "nameEn": "forest_green_cool",
+  "nameEnShort": "forest_green_cool_booz",
+  "authorDisplay": "波子",
+  "assetId": "32_08",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-log | 基 于 V-Iog | 于 V-log [",
+  "desc": "明显的黄绿倾向，肤色有单独优化，适合顺光拍摄场景"
+ },
+ {
+  "id": "32_09",
+  "cat": "人像",
+  "title": "暮色",
+  "author": "Jon Simo",
+  "preview": "/uploadfiles/2024/07/20240709162208150.jpg",
+  "files": [
+   {
+    "name": "dusk.cube",
+    "bytes": 115105
+   }
+  ],
+  "nameEn": "dusk",
+  "nameEnShort": "dusk_jonsimo",
+  "authorDisplay": "Jon Simo",
+  "assetId": "32_09",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 基 于 V-log | 基 于 V-Iog | 基 于 \\/-log | 。 巢 于 V 一 g",
+  "desc": "电影感调色LUT"
+ },
+ {
+  "id": "32_10",
+  "cat": "人像",
+  "title": "海边人像",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709161916736.jpg",
+  "files": [
+   {
+    "name": "seaside_portrait.cube",
+    "bytes": 6576840
+   }
+  ],
+  "nameEn": "seaside_portrait",
+  "nameEnShort": "seaside_portrait_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "32_10",
+  "base": "V-Log",
+  "baseSrc": "visual",
+  "baseOcr": "æv-\\og | 基 于 V 爿 og | 基 于 V-Iog",
+  "desc": "让海水以及绿色背景更偏青绿色，画面更加具有胶片感"
+ },
+ {
+  "id": "32_11",
+  "cat": "人像",
+  "title": "唯美人像",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709162242574.jpg",
+  "files": [
+   {
+    "name": "beauty_portrait.cube",
+    "bytes": 969226
+   }
+  ],
+  "nameEn": "beauty_portrait",
+  "nameEnShort": "beauty_portrait_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "32_11",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-\\og | 基 于 V-log | 基 于 V-log | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "保证肤色透亮的同时，让黄色和绿色更有胶片氛围"
+ },
+ {
+  "id": "32_12",
+  "cat": "人像",
+  "title": "藏区暖光",
+  "author": "海螺壳",
+  "preview": "/uploadfiles/2024/07/20240709162253876.jpg",
+  "files": [
+   {
+    "name": "tibet_warm_light.cube",
+    "bytes": 688215
+   }
+  ],
+  "nameEn": "tibet_warm_light",
+  "nameEnShort": "tibet_warm_light_conch",
+  "authorDisplay": "海螺壳",
+  "assetId": "32_12",
+  "base": "标准色彩",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 一 基 于 标 雁 彩 \"",
+  "desc": "整体偏暖，低对比，给人温暖柔和的视觉感受"
+ },
+ {
+  "id": "32_13",
+  "cat": "人像",
+  "title": "日系青调",
+  "author": "EJAY",
+  "preview": "/uploadfiles/2024/07/20240709162308783.jpg",
+  "files": [
+   {
+    "name": "japanese_cyan.vlt",
+    "bytes": 67151
+   }
+  ],
+  "nameEn": "japanese_cyan",
+  "nameEnShort": "japanese_cyan_ejay",
+  "authorDisplay": "EJAY",
+  "assetId": "32_13",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "于 \\/-log | 基 于 \\/-log | 基 于 v-log | 基 于 \\/-log | 基 于 v-log | 基 于 V-Iog",
+  "desc": "色彩偏青高短调为主，适合人像阴天"
+ },
+ {
+  "id": "32_14",
+  "cat": "人像",
+  "title": "肤色优化",
+  "author": "EJAY",
+  "preview": "/uploadfiles/2024/07/20240709162328568.jpg",
+  "files": [
+   {
+    "name": "skin_tone_boost.vlt",
+    "bytes": 69340
+   }
+  ],
+  "nameEn": "skin_tone_boost",
+  "nameEnShort": "skin_tone_boost_ejay",
+  "authorDisplay": "EJAY",
+  "assetId": "32_14",
+  "base": "标准模式",
+  "baseSrc": "ocr",
+  "baseOcr": "于 标 准 模 式 | 基 于 标 准 模 式 | 基 于 标 准 模 式 | 于 标 准 模 式 | 基 于 标 准 模 式 | 諏 于 标 准",
+  "desc": "不改变其他色调，削弱红色溢出"
+ },
+ {
+  "id": "32_16",
+  "cat": "人像",
+  "title": "轻日系-蓝",
+  "author": "兔小呆",
+  "preview": "/uploadfiles/2024/09/20240912163752647.jpg",
+  "files": [
+   {
+    "name": "light_japanese_blue.cube",
+    "bytes": 970607
+   }
+  ],
+  "nameEn": "light_japanese_blue",
+  "nameEnShort": "light_japanese_blue_tuxiaodai",
+  "authorDisplay": "兔小呆",
+  "assetId": "32_16",
+  "base": "STD模式",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 STD 模 式 | 基 于 STD 模 式 | 基 于 STD 模 式 | 基 于 STD 模 式 | 基 于 STD 傈 一 | 于 STDg__",
+  "desc": "轻日系微冷调，着重肤色的优化，适合于日常大部分场景的拍摄。"
+ },
+ {
+  "id": "32_17",
+  "cat": "人像",
+  "title": "暖白肤色",
+  "author": "兔小呆",
+  "preview": "/uploadfiles/2025/01/8fb1db26f85d6aef12c32a015e191e2.png",
+  "files": [
+   {
+    "name": "warm_white_skin.cube",
+    "bytes": 970598
+   }
+  ],
+  "nameEn": "warm_white_skin",
+  "nameEnShort": "warm_white_skin_tuxiaodai",
+  "authorDisplay": "兔小呆",
+  "assetId": "32_17",
+  "base": "标准",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准",
+  "desc": "针对肤色进行优化，呈现为暖白色，可补充阴天面部失色"
+ },
+ {
+  "id": "32_18",
+  "cat": "人像",
+  "title": "RaG Film CNED2",
+  "author": "兔小呆  TXD",
+  "preview": "/uploadfiles/2025/08/微信图片_20250812101652.png",
+  "files": [
+   {
+    "name": "rag_film_cned2.cube",
+    "bytes": 970635
+   }
+  ],
+  "nameEn": "rag_film_cned2",
+  "nameEnShort": "rag_film_cned2_tuxiaodai_txd",
+  "authorDisplay": "兔小呆",
+  "assetId": "32_18",
+  "base": "CNED2",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 C N E D 2 | 基 于 C N E D 2 | 基 于 C N E D 2 | 基 于 C N E D 2 | 基 于 C N E D 2 | 基 于 C N E D 2",
+  "desc": "对肤色进行了一定优化，适合夏日日常扫街 花草 和人像的拍摄。"
+ },
+ {
+  "id": "32_19",
+  "cat": "人像",
+  "title": "复古夏日",
+  "author": "德松Desong",
+  "preview": "/uploadfiles/2025/11/复古夏日.png",
+  "files": [
+   {
+    "name": "retro_summer.cube",
+    "bytes": 962059
+   }
+  ],
+  "nameEn": "retro_summer",
+  "nameEnShort": "retro_summer_desong",
+  "authorDisplay": "德松",
+  "assetId": "32_19",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d",
+  "desc": "绿色系胶片的影调色调为基础风格，突出对蓝、绿色彩的刻画，同时对红色、橙色也有非常生动的呈现。在此基础上强调柔和自然的人像肤色表现。亮部暖调细腻，暗部偏蓝带洋红。"
+ },
+ {
+  "id": "32_20",
+  "cat": "人像",
+  "title": "薄暮苔痕",
+  "author": "德松Desong",
+  "preview": "/uploadfiles/2025/11/薄暮苔痕.png",
+  "files": [
+   {
+    "name": "dusk_moss.cube",
+    "bytes": 970449
+   }
+  ],
+  "nameEn": "dusk_moss",
+  "nameEnShort": "dusk_moss_desong",
+  "authorDisplay": "德松",
+  "assetId": "32_20",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S t d | 基 于 s t d | 基 于 S t d | 基 于 S t d | 基 于 S t d",
+  "desc": "以人像胶片的影调色调为基础风格，增加少量温暖的色彩偏向。在光线充足的情况下表现最佳，对比度适中，呈现明快清亮的质感；在光线不足的情况下保证肤色优先，对比度有所增加，暗部会呈现少量黄绿色偏向。"
+ },
+ {
+  "id": "32_21",
+  "cat": "人像",
+  "title": "Eterna",
+  "author": "兔小呆  TXD",
+  "preview": "/uploadfiles/2025/11/TXD Eternal.png",
+  "files": [
+   {
+    "name": "eterna.cube",
+    "bytes": 970598
+   }
+  ],
+  "nameEn": "eterna",
+  "nameEnShort": "eterna_tuxiaodai_txd",
+  "authorDisplay": "兔小呆",
+  "assetId": "32_21",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d",
+  "desc": "基于STD 调色，从徕卡Eternal滤镜中获得调色的一些想法，改变了影调，但保留了蓝紫的味道，最终甚至有了一些Classic Negative的味道，同时优化了肤色。Lut的整体色调还是偏重，比较吃光线，人像拍摄时一定要有光源，如果没有直射光源时，机内曝光补偿+1/3~2/3，机内阴影+1~+2来使用，扫街机内推荐打开颗粒LOW"
+ },
+ {
+  "id": "33_01",
+  "cat": "户外",
+  "title": "夏日",
+  "author": "阿里Halip",
+  "preview": "/uploadfiles/2024/07/20240709163732208.jpg",
+  "files": [
+   {
+    "name": "summer_day.cube",
+    "bytes": 985981
+   }
+  ],
+  "nameEn": "summer_day",
+  "nameEnShort": "summer_day_halip",
+  "authorDisplay": "阿里",
+  "assetId": "33_01",
+  "base": "PORT模式",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 PORT 模 式 《 | 基 于 PORT 模 式 | 基 于 PORT 模 式 | 基 于 PORT 模 式 | 基 于 PORT 模 式 | 某 于 PORT 模 式 ， 以",
+  "desc": "使用时叠加Sample LUT2，透明度控制色彩亮度"
+ },
+ {
+  "id": "33_02",
+  "cat": "户外",
+  "title": "暗调故事",
+  "author": "巴文欢",
+  "preview": "/uploadfiles/2024/07/20240709163716869.jpg",
+  "files": [
+   {
+    "name": "dark_story.vlt",
+    "bytes": 62565
+   }
+  ],
+  "nameEn": "dark_story",
+  "nameEnShort": "dark_story_bawenhuan",
+  "authorDisplay": "巴文欢",
+  "assetId": "33_02",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "v-\\og | 于 \\/-log | 基 于 V-Iog | 基 于 V-log | 。 巢 于 \\/ 爿 闪",
+  "desc": "基于2383风格，根据vlog曲线特性加以调整生成"
+ },
+ {
+  "id": "33_03",
+  "cat": "户外",
+  "title": "粉黛青春",
+  "author": "巴文欢",
+  "preview": "/uploadfiles/2024/07/20240709163707940.jpg",
+  "files": [
+   {
+    "name": "pink_youth.vlt",
+    "bytes": 71101
+   }
+  ],
+  "nameEn": "pink_youth",
+  "nameEnShort": "pink_youth_bawenhuan",
+  "authorDisplay": "巴文欢",
+  "assetId": "33_03",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "v-\\og | 于 \\/-log | 基 于 V-Iog | 基 于 V-log | 。 巢 于 \\/ 爿 闪",
+  "desc": "基于2383风格，根据vlog曲线特性加以调整生成"
+ },
+ {
+  "id": "33_04",
+  "cat": "户外",
+  "title": "葱绿气息",
+  "author": "巴文欢",
+  "preview": "/uploadfiles/2024/07/20240709163656109.jpg",
+  "files": [
+   {
+    "name": "verdant_breeze.vlt",
+    "bytes": 68447
+   }
+  ],
+  "nameEn": "verdant_breeze",
+  "nameEnShort": "verdant_breeze_bawenhuan",
+  "authorDisplay": "巴文欢",
+  "assetId": "33_04",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "v-\\og | 于 \\/-log | 基 于 V-Iog | 基 于 V-log | 。 巢 于 \\/ 爿 闪",
+  "desc": "由portra800和Velvia胶片风格调整生成"
+ },
+ {
+  "id": "33_05",
+  "cat": "户外",
+  "title": "夏日暖风",
+  "author": "Plady",
+  "preview": "/uploadfiles/2024/07/20240709163637435.jpg",
+  "files": [
+   {
+    "name": "summer_warm_wind.cube",
+    "bytes": 885013
+   }
+  ],
+  "nameEn": "summer_warm_wind",
+  "nameEnShort": "summer_warm_wind_plady",
+  "authorDisplay": "Plady",
+  "assetId": "33_05",
+  "base": "标准色调",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 色 调 | 基 于 标 准 色 调 | 基 于 标 准 色 调 ' | 基 于 标 准 色 调 | 一 基 于 标 准 色 调 | 一 基 于 标 准 色 调",
+  "desc": "具有低饱和度特性，类似留银冲洗的复古胶片味道"
+ },
+ {
+  "id": "33_06",
+  "cat": "户外",
+  "title": "浓厚格调",
+  "author": "Plady",
+  "preview": "/uploadfiles/2024/07/20240709163625338.jpg",
+  "files": [
+   {
+    "name": "rich_tone.cube",
+    "bytes": 885013
+   }
+  ],
+  "nameEn": "rich_tone",
+  "nameEnShort": "rich_tone_plady",
+  "authorDisplay": "Plady",
+  "assetId": "33_06",
+  "base": "标准色调",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 色 调 | 一 基 于 标 准 色 调 | 一 基 于 标 准 色 调",
+  "desc": "具有低饱和度特性，类似留银冲洗的复古胶片味道"
+ },
+ {
+  "id": "33_07",
+  "cat": "户外",
+  "title": "灰度电影",
+  "author": "Plady",
+  "preview": "/uploadfiles/2024/07/20240709163607910.jpg",
+  "files": [
+   {
+    "name": "grayscale_film.cube",
+    "bytes": 885013
+   }
+  ],
+  "nameEn": "grayscale_film",
+  "nameEnShort": "grayscale_film_plady",
+  "authorDisplay": "Plady",
+  "assetId": "33_07",
+  "base": "标准色调",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 色 调 一 | 基 于 标 准 色 调 | 基 于 标 准 色 调 | 基 于 标 准 色 调 | 一 基 于 标 准 色 调 | 一 基 于 标 准 色 调 一",
+  "desc": "晴天时蓝天呈现高级银灰色，阴天街拍则散发清冷气息"
+ },
+ {
+  "id": "33_08",
+  "cat": "户外",
+  "title": "复古蓝调",
+  "author": "波子Booz",
+  "preview": "/uploadfiles/2024/07/20240709163556592.jpg",
+  "files": [
+   {
+    "name": "retro_blue_v1.cube",
+    "bytes": 947970
+   },
+   {
+    "name": "retro_blue_v2.vlt",
+    "bytes": 68313
+   }
+  ],
+  "nameEn": "retro_blue",
+  "nameEnShort": "retro_blue_booz",
+  "authorDisplay": "波子",
+  "assetId": "33_08",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "一基 于 \\/-\\og | 基 于 \\/-log | 基 于 V-Iog | 基 于 V-Iog | æ\\/-log | 。 巢 于 \\/ 爿 闪",
+  "desc": "明暗反差相对较高，适合顺光拍摄的场景"
+ },
+ {
+  "id": "33_09",
+  "cat": "户外",
+  "title": "幻化",
+  "author": "Jon Simo",
+  "preview": "/uploadfiles/2024/07/20240709163545841.jpg",
+  "files": [
+   {
+    "name": "illusion.cube",
+    "bytes": 114704
+   }
+  ],
+  "nameEn": "illusion",
+  "nameEnShort": "illusion_jonsimo",
+  "authorDisplay": "Jon Simo",
+  "assetId": "33_09",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 基 于 V-log | 基 于 V-Iog | 基 于 \\/-log",
+  "desc": "适用于白天模仿夜间拍摄的LUT"
+ },
+ {
+  "id": "33_10",
+  "cat": "户外",
+  "title": "清新美食",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163533274.jpg",
+  "files": [
+   {
+    "name": "fresh_food.cube",
+    "bytes": 958546
+   }
+  ],
+  "nameEn": "fresh_food",
+  "nameEnShort": "fresh_food_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_10",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "v-\\og | 基 于 V-log | 于 \\/-log | 基 于 V-log | 。 巢 于 \\/ 爿 闪",
+  "desc": "画面整体色调清新自然，赋予了风格化的胶片感"
+ },
+ {
+  "id": "33_11",
+  "cat": "户外",
+  "title": "露营氛围",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163512405.jpg",
+  "files": [
+   {
+    "name": "camping_mood.cube",
+    "bytes": 963042
+   }
+  ],
+  "nameEn": "camping_mood",
+  "nameEnShort": "camping_mood_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_11",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 基 于 V-log | 基 于 V-Iog | 基 于 \\/-log | 基 于 \\/-log",
+  "desc": "色彩偏胶片氛围感，保证画面色彩的同时保留原片的味道"
+ },
+ {
+  "id": "33_12",
+  "cat": "户外",
+  "title": "稻田乡村",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163459660.jpg",
+  "files": [
+   {
+    "name": "rice_field_country.cube",
+    "bytes": 961637
+   }
+  ],
+  "nameEn": "rice_field_country",
+  "nameEnShort": "rice_field_country_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_12",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-Iog | 基 于 \\/-log | 基 于 V-Iog",
+  "desc": "绿黄色部分过度协调，人物肤色也保留了胶片色的风格"
+ },
+ {
+  "id": "33_13",
+  "cat": "户外",
+  "title": "温暖乡村",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163447704.jpg",
+  "files": [
+   {
+    "name": "warm_countryside.cube",
+    "bytes": 976435
+   }
+  ],
+  "nameEn": "warm_countryside",
+  "nameEnShort": "warm_countryside_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_13",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 V-Iog | 0 | 基 于 V-Iog | 基 于 v-log | 0 | 基 于 V-Iog",
+  "desc": "整体色调是复古胶片色，暗部的一些绿色呈现出青绿色"
+ },
+ {
+  "id": "33_14",
+  "cat": "户外",
+  "title": "黄昏氛围",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163426286.jpg",
+  "files": [
+   {
+    "name": "dusk_mood.cube",
+    "bytes": 906136
+   }
+  ],
+  "nameEn": "dusk_mood",
+  "nameEnShort": "dusk_mood_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_14",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-Iog | 基 于 V 爿 og | 基 于 V-Iog",
+  "desc": "整体色调自然舒适，保留了暗部细节突出傍晚的氛围"
+ },
+ {
+  "id": "33_15",
+  "cat": "户外",
+  "title": "金色稻田",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163408769.jpg",
+  "files": [
+   {
+    "name": "golden_rice_field.cube",
+    "bytes": 971468
+   }
+  ],
+  "nameEn": "golden_rice_field",
+  "nameEnShort": "golden_rice_field_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_15",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-Iog | 于 \\/-log | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "绿色以及黄色部分过度的更加协调，保留了胶片色的风格"
+ },
+ {
+  "id": "33_16",
+  "cat": "户外",
+  "title": "青绿风景",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709163358371.jpg",
+  "files": [
+   {
+    "name": "green_scenery.cube",
+    "bytes": 965607
+   }
+  ],
+  "nameEn": "green_scenery",
+  "nameEnShort": "green_scenery_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "33_16",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-Iog | 基 于 V 爿 og | 基 于 V-Iog",
+  "desc": "整体⾊系偏胶⽚氛围感，可以让画⾯⻛格化变得强烈"
+ },
+ {
+  "id": "33_17",
+  "cat": "户外",
+  "title": "正片",
+  "author": "海螺壳",
+  "preview": "/uploadfiles/2024/07/20240709163340475.jpg",
+  "files": [
+   {
+    "name": "reversal_film.cube",
+    "bytes": 688212
+   }
+  ],
+  "nameEn": "reversal_film",
+  "nameEnShort": "reversal_film_conch",
+  "authorDisplay": "海螺壳",
+  "assetId": "33_17",
+  "base": "标准色彩",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 基 于 标 准 色 彩 | 一 基 于 标 雁 彩 \"",
+  "desc": "鲜明的红蓝黄色彩直出，基于胶卷正片色彩设计而成"
+ },
+ {
+  "id": "33_18",
+  "cat": "户外",
+  "title": "影院色调",
+  "author": "EJAY",
+  "preview": "/uploadfiles/2024/07/20240709163327540.jpg",
+  "files": [
+   {
+    "name": "cinema_tone.vlt",
+    "bytes": 69382
+   }
+  ],
+  "nameEn": "cinema_tone",
+  "nameEnShort": "cinema_tone_ejay",
+  "authorDisplay": "EJAY",
+  "assetId": "33_18",
+  "base": "新经典模式",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 新 经 典 模 式 | 基 于 新 经 典 模 式 | 基 于 新 经 典 模 式 | 一 基 于 新 经 典 模 笠 ·",
+  "desc": "色调柔和低饱和，蓝色会往青色偏移"
+ },
+ {
+  "id": "33_19",
+  "cat": "户外",
+  "title": "暖调胶片",
+  "author": "EJAY",
+  "preview": "/uploadfiles/2024/07/20240709163317253.jpg",
+  "files": [
+   {
+    "name": "warm_film.vlt",
+    "bytes": 60736
+   }
+  ],
+  "nameEn": "warm_film",
+  "nameEnShort": "warm_film_ejay",
+  "authorDisplay": "EJAY",
+  "assetId": "33_19",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "V-\\og | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "色调较暖对比强，拥有浓厚胶片味道"
+ },
+ {
+  "id": "33_20",
+  "cat": "户外",
+  "title": "糖果色",
+  "author": "小翟同学",
+  "preview": "/uploadfiles/2024/11/92befc277b62be21e1c4e6dccfbc122.png",
+  "files": [
+   {
+    "name": "candy_color.cube",
+    "bytes": 991413
+   }
+  ],
+  "nameEn": "candy_color",
+  "nameEnShort": "candy_color_xiaozhai",
+  "authorDisplay": "小翟同学",
+  "assetId": "33_20",
+  "base": "标准",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 标 准 | 基 于 标 ， 隹 | 基 于 标 准 | 基 于 标 准 | 基 于 标 准",
+  "desc": "糖果色；低饱和度高明度；青蓝色天空+橙黄色建筑撞色。"
+ },
+ {
+  "id": "33_21",
+  "cat": "户外",
+  "title": "蓝漾",
+  "author": "兔小呆",
+  "preview": "/uploadfiles/2025/11/蓝漾.png",
+  "files": [
+   {
+    "name": "blue_ripple.cube",
+    "bytes": 970607
+   }
+  ],
+  "nameEn": "blue_ripple",
+  "nameEnShort": "blue_ripple_tuxiaodai",
+  "authorDisplay": "兔小呆",
+  "assetId": "33_21",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 s t d",
+  "desc": "一款轻日系微冷调的调色lut，着重进行了肤色的优化，没有很重的风格化影调，泛用性强，在阴天环境下也适用，对于lut使用者的门槛较低，适合初学者使用。"
+ },
+ {
+  "id": "33_22",
+  "cat": "户外",
+  "title": "晴天薄荷",
+  "author": "晴天📸",
+  "preview": "/uploadfiles/2025/11/晴天薄荷1.png",
+  "files": [
+   {
+    "name": "sunny_mint.cube",
+    "bytes": 970368
+   }
+  ],
+  "nameEn": "sunny_mint",
+  "nameEnShort": "sunny_mint_qingtian",
+  "authorDisplay": "晴天",
+  "assetId": "33_22",
+  "base": "part",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 p a r t | 基 于 p a r t | 基 于 p a r t | 基 于 p a r t | 基 于 p a r t",
+  "desc": "这款专为人像与绿植设计的“薄荷味”LUT，灵感源自松下经典色彩，通过微偏青绿的低对比色调、受保护的粉润肤色与低饱和青翠绿植，轻松打造通透干净、充满呼吸感的日系清新影像，建议在柔和光线下配合轻微过曝使用，效果更自然。"
+ },
+ {
+  "id": "33_23",
+  "cat": "户外",
+  "title": "苔痕雨季",
+  "author": "舟zhou",
+  "preview": "/uploadfiles/2025/11/微信图片_20251120164310.png",
+  "files": [
+   {
+    "name": "mossy_rain.cube",
+    "bytes": 970367
+   }
+  ],
+  "nameEn": "mossy_rain",
+  "nameEnShort": "mossy_rain_zhou",
+  "authorDisplay": "舟",
+  "assetId": "33_23",
+  "base": "STD",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d | 基 于 S t d 出 甲",
+  "desc": "这是一款专为阴雨与多云天气设计的景观LUT，通过重塑绿色光谱，将其转化为柔和、深沉且充满生命力的色调，如同雨后被浸润的青苔，温润而安宁。"
+ },
+ {
+  "id": "34_01",
+  "cat": "室内",
+  "title": "黑白旧胶片",
+  "author": "海螺壳",
+  "preview": "/uploadfiles/2024/07/20240709164112701.jpg",
+  "files": [
+   {
+    "name": "mono_old_film.cube",
+    "bytes": 688212
+   }
+  ],
+  "nameEn": "mono_old_film",
+  "nameEnShort": "mono_old_film_conch",
+  "authorDisplay": "海螺壳",
+  "assetId": "34_01",
+  "base": "标准色彩",
+  "baseSrc": "visual",
+  "baseOcr": "基 于 标 准 色 彩 凹 | 基 于 标 准 色 杉",
+  "desc": "低对比的暗部和亮部，高宽容度的宛如传统黑白电影"
+ },
+ {
+  "id": "34_02",
+  "cat": "室内",
+  "title": "胶片复古",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709164101860.jpg",
+  "files": [
+   {
+    "name": "retro_film.cube",
+    "bytes": 775229
+   }
+  ],
+  "nameEn": "retro_film",
+  "nameEnShort": "retro_film_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "34_02",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-log | 于 \\/-log | 基 于 \\/-log ； | 基 于 V-Iog 《 ，",
+  "desc": "整体色彩饱满，整体呈现暖黄复古的色彩感"
+ },
+ {
+  "id": "34_03",
+  "cat": "室内",
+  "title": "美食胶片",
+  "author": "郭宾",
+  "preview": "/uploadfiles/2024/07/20240709164050191.jpg",
+  "files": [
+   {
+    "name": "food_film.cube",
+    "bytes": 961770
+   }
+  ],
+  "nameEn": "food_film",
+  "nameEnShort": "food_film_guobin",
+  "authorDisplay": "郭宾",
+  "assetId": "34_03",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "æv-\\og | 基 于 V-Iog | 于 \\/-log | 基 于 V-Iog | 基 于 V-Iog",
+  "desc": "画面色调清新自然，食物本身色彩赋予了风格化的胶片感"
+ },
+ {
+  "id": "34_05",
+  "cat": "室内",
+  "title": "怀旧",
+  "author": "Jon Simo",
+  "preview": "/uploadfiles/2024/07/20240709164029543.jpg",
+  "files": [
+   {
+    "name": "nostalgia.cube",
+    "bytes": 114704
+   }
+  ],
+  "nameEn": "nostalgia",
+  "nameEnShort": "nostalgia_jonsimo",
+  "authorDisplay": "Jon Simo",
+  "assetId": "34_05",
+  "base": "V-Log",
+  "baseSrc": "ocr",
+  "baseOcr": "v-\\og | 基 于 V-log | 于 \\/-log | 基 于 v-log | 基 于 V-Iog",
+  "desc": "明显的暖色调，复古氛围感怀旧LUT"
+ },
+ {
+  "id": "34_06",
+  "cat": "室内",
+  "title": "复古旧胶片",
+  "author": "海螺壳",
+  "preview": "/uploadfiles/2024/07/20240709164020786.jpg",
+  "files": [
+   {
+    "name": "retro_old_film.cube",
+    "bytes": 688212
+   }
+  ],
+  "nameEn": "retro_old_film",
+  "nameEnShort": "retro_old_film_conch",
+  "authorDisplay": "海螺壳",
+  "assetId": "34_06",
+  "base": "标准色彩",
+  "baseSrc": "visual",
+  "baseOcr": "基 于 标 准 色 彩 凹 | 基 于 标 准 色 杉",
+  "desc": "基于旧胶片设计的色彩配比。整体偏暖。浓郁的怀旧感"
+ },
+ {
+  "id": "34_07",
+  "cat": "室内",
+  "title": "洋红旧胶片",
+  "author": "海螺壳",
+  "preview": "/uploadfiles/2024/07/20240709164007940.jpg",
+  "files": [
+   {
+    "name": "magenta_old_film.cube",
+    "bytes": 688212
+   }
+  ],
+  "nameEn": "magenta_old_film",
+  "nameEnShort": "magenta_old_film_conch",
+  "authorDisplay": "海螺壳",
+  "assetId": "34_07",
+  "base": "标准色彩",
+  "baseSrc": "visual",
+  "baseOcr": "基 于 标 准 色 彩 凹 | 基 于 标 准 色 杉",
+  "desc": "整体偏洋红，带来故事叙述的怀旧感"
+ },
+ {
+  "id": "34_08",
+  "cat": "室内",
+  "title": "胶片印象",
+  "author": "EJAY",
+  "preview": "/uploadfiles/2024/07/20240709163955552.jpg",
+  "files": [
+   {
+    "name": "film_impression.cube",
+    "bytes": 970911
+   }
+  ],
+  "nameEn": "film_impression",
+  "nameEnShort": "film_impression_ejay",
+  "authorDisplay": "EJAY",
+  "assetId": "34_08",
+  "base": "CLASSIC NEO",
+  "baseSrc": "ocr",
+  "baseOcr": "'##CLASS ℃ NEOM\\ | 基 于 CLASS ℃ NEO 的 | %9CLASS ℃ NEO | 基 于 CLASS ℃ NEO 甾 \\ | •#*CLASS ℃ NEO\"\\ | 基 于 CLASS ℃ NEO",
+  "desc": "经典复古，可以机内模拟颗粒效果"
+ },
+ {
+  "id": "34_09",
+  "cat": "室内",
+  "title": "轻柔绿意",
+  "author": "晴天📸",
+  "preview": "/uploadfiles/2025/11/轻柔绿意.png",
+  "files": [
+   {
+    "name": "soft_green.cube",
+    "bytes": 970368
+   }
+  ],
+  "nameEn": "soft_green",
+  "nameEnShort": "soft_green_qingtian",
+  "authorDisplay": "晴天",
+  "assetId": "34_09",
+  "base": "PORT",
+  "baseSrc": "ocr",
+  "baseOcr": "基 于 p 0 r t | 基 于 p 0 r t | 基 于 p 0 r t | 基 于 p 0 r t | 基 于 p 0 r t | P 0 r t",
+  "desc": "这款LUT以电影感绿色系为核心，在呈现高级绿色质感的同时，精准保护人物肤色的通透感。特别为LUMIX相机优化。建议在充足光线下稍加曝光使用，轻松打造富有呼吸感的电影级画面。"
+ }
+]

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  自适应图标 . 背景层。
-  线性渐变：左上偏亮、右下更深，给镜片一个从光里浮出来的底。
-  矢量形式约 1 KB，任何密度都不糊。
+  应用图标 · 背景层（自适应图标 background）。
+  规格从设备上原有的 v8 安装包里还原：对角线渐变 #202834 → #0D1015。
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
@@ -19,8 +18,8 @@
                 android:startY="0"
                 android:endX="108"
                 android:endY="108"
-                android:startColor="#202834"
-                android:endColor="#0D1015" />
+                android:startColor="#FF202834"
+                android:endColor="#FF0D1015" />
         </aapt:attr>
     </path>
 </vector>

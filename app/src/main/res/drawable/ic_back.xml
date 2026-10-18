@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  返回（箭头 + 杆）。替换搜索页顶栏原来的「←」字符。
+
+  autoMirrored：RTL 语言下自动翻转，不用再写一套 ic_back_rtl。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:autoMirrored="true">
+
+    <!-- 杆 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:pathData="M20.2,12 L4.6,12" />
+
+    <!-- 箭头（左上 + 左下两条） -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M11.4,5 L4.3,12 L11.4,19" />
+</vector>

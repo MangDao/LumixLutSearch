@@ -185,6 +185,23 @@ public final class Api {
     }
 
     /** filter 请求体。字段为空则整个省略（服务端拒绝空串）。 */
+    /**
+     * 接口语言。**坑**：服务端只认 `zh-CN`（大写 CN、连字符）；
+     * `zh`、`zh-cn`、`zh_CN`、`zh-Hans`、`cn`、`chs` 全部回退成英文（实测 §12.1 的结论就是这么错的）。
+     * `ja` 有日文；其余语言一律回退 en。
+     */
+    private static String lang = "en";
+
+    /** 按系统语言给出接口语言码。 */
+    public static void setLang() {
+        String l = java.util.Locale.getDefault().getLanguage();
+        if ("zh".equals(l)) lang = "zh-CN";
+        else if ("ja".equals(l)) lang = "ja";
+        else lang = "en";
+    }
+
+    public static String lang() { return lang; }
+
     public static JSONObject filterBody(String lang, int limit, int offset,
                                         String genreCode, String creatorCode,
                                         String[] countryCodes) throws IOException {

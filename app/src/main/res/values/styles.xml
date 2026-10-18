@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  主题说明（2026-10 去掉顶部大黑边那轮加的）：
+
+  AppTheme      = 无 ActionBar。主界面（发现/排行/筛选/我的）自己排标题，
+                  不再被系统的 DarkActionBar 占用 ~56dp，也不会顶出一条黑边。
+  ChildTheme    = 二级页面（搜索/我的下载/设置）保留 ActionBar，
+                  因为那些页面的返回箭头是系统给的，去掉就得自己画返回。
+  两者都把状态栏刷成页面底色 + 深色图标，避免"内容浅色、状态栏一块黑"的割裂感。
+-->
+<resources>
+
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:colorAccent">@color/accent</item>
+    </style>
+
+    <style name="ChildTheme" parent="@android:style/Theme.Material.Light">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorPrimary">@color/bg</item>
+        <item name="android:colorPrimaryDark">@color/bg</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:colorAccent">@color/accent</item>
+    </style>
+
+
+</resources>

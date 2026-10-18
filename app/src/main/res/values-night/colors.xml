@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  暗色配色（values-night）。
+
+  只覆盖颜色，不改任何布局/尺寸 —— 所有界面都通过 Ui.init() 读这里的值。
+  配色原则：底色比纯黑高一档（#0F1216），卡片再高一档（#181C22），
+  强调色提亮一档（#3FC9C9），因为深底上的 #0FA3A3 对比度只有 3.9:1，看不清。
+-->
+<resources>
+    <!-- 面 -->
+    <color name="bg">#FF0F1216</color>
+    <color name="card">#FF181C22</color>
+    <!-- 按压态：浅色主题是"压暗"，深色主题反过来要"提亮" -->
+    <color name="card_press">#1FFFFFFF</color>
+
+    <!-- 字 -->
+    <color name="text">#FFE9ECF1</color>
+    <color name="text_sub">#FF9BA4B0</color>
+    <color name="text_weak">#FF6C7683</color>
+
+    <!-- 线与强调 -->
+    <color name="line">#FF262B33</color>
+    <color name="accent">#FF3FC9C9</color>
+    <color name="accent_soft">#333FC9C9</color>
+    <color name="chip_bg">#FF232830</color>
+    <color name="rank_top">#FFFF9354</color>
+    <color name="rank_n">#FF7D8794</color>
+    <color name="scrim">#B3000000</color>
+    <color name="danger">#FFFF7A7E</color>
+
+    <!-- 骨架屏：比卡片再高一点点，扫光用浅浅一道白 -->
+    <color name="skeleton">#FF232830</color>
+    <color name="skeleton_shine">#1AFFFFFF</color>
+
+    <!-- 底部弹层抓手 -->
+    <color name="handle">#FF3A4048</color>
+
+    <!-- 选中块：比轨道（chip_bg #232830）再亮一档。暗色下"更亮 = 被选中"，
+         照抄浅色的纯白会刺眼，照抄卡片色（比轨道暗）则看着像按下去的凹槽。 -->
+    <color name="seg_on">#FF333A44</color>
+    <!-- 25 周年专栏标题：金色是它的"身份色"，与其他小节的青绿竖条并存 -->
+    <color name="gold_title">#FFF3D9A0</color>
+    <color name="gold_rule">#33F3D9A0</color>
+    <!-- 强调色（ACCENT）上的前景色：浅色主题是白字，深色主题的青色很亮、必须反过来用深字 -->
+    <color name="on_accent">#FF062B2B</color>
+</resources>

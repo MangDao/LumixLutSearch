@@ -13,9 +13,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,9 +30,11 @@ public class ImageLoader {
 
     /** 图片直接挂在服务端根路径下，不含 lutapi/v2 前缀。 */
     public static final String IMG_BASE = "https://lumix-base.jpn.panasonic.com";
+    /** 图片域名（预热 DNS 用）。 */
+    private static final String HOST = "lumix-base.jpn.panasonic.com";
 
-    private static final int CONNECT_TIMEOUT = 10000;
-    private static final int READ_TIMEOUT = 20000;
+    private static final int CONNECT_TIMEOUT = 8000;   // 实测建连可能卡 60s+，超时快点好换路
+    private static final int READ_TIMEOUT = 15000;
     private static final int MAX_BYTES = 8 * 1024 * 1024;
 
     public interface Callback {
@@ -120,10 +123,18 @@ public class ImageLoader {
     }
 
     private final Handler ui = new Handler(Looper.getMainLooper());
-    private final ExecutorService pool = Executors.newFixedThreadPool(3);
+    private final ExecutorService pool = Executors.newFixedThreadPool(4);   // 并行多试几条路，比串行重试快
+    /** 详情弹层专用线程池：不跟网格抢那 3 个线程，点开就开始下。 */
+    private final ExecutorService detailPool = Executors.newFixedThreadPool(2);
     private final LruCache<String, Bitmap> cache;
-    private final Set<String> inFlight =
-            Collections.synchronizedSet(new HashSet<String>());
+    /**
+     * 同一 URL 的等待者。
+     *
+     * 以前用 inFlight 集合去重，后来的请求直接 return —— 那个回调永远不会被调用。
+     * 网格正在下同一张图时点开详情，就会出现"图一直转圈、永远不出来"。
+     * 现在改成登记回调，谁先发起谁负责下载，下完统一分发。
+     */
+    private final Map<String, List<Callback>> waiters = new HashMap<>();
 
     private ImageLoader() {
         int maxKb = (int) (Runtime.getRuntime().maxMemory() / 1024);
@@ -143,8 +154,42 @@ public class ImageLoader {
         return IMG_BASE + (path.startsWith("/") ? path : "/" + path);
     }
 
-    /** 命中缓存就直接回调（仍在主线程），否则排队下载。 */
+    /**
+     * 预热：进程一起来就把图片域名的 DNS/TLS 打通。
+     *
+     * 实测这网络解析 lumix-base.jpn.panasonic.com 要 ~20 秒，而且是**每个进程一次**；
+     * 用户点开详情时才发现要解析，就会干等半分钟。提前在后台解析，命中系统缓存后
+     * 后续请求就是 0.5 秒量级。
+     */
+    public void warmUp() {
+        Thread t = new Thread(new Runnable() {
+            @Override public void run() {
+                long t0 = System.currentTimeMillis();
+                try {
+                    java.net.InetAddress[] a = java.net.InetAddress.getAllByName(HOST);
+                } catch (Throwable ignored) {
+                }
+            }
+        }, "img-warmup");
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.start();
+    }
+    /** 网格用：命中缓存就直接回调（仍在主线程），否则进 3 线程池排队。 */
     public void load(final String path, final Callback cb) {
+        enqueue(path, cb, false);
+    }
+
+    /**
+     * 详情弹层用：进独立的 2 线程池。
+     *
+     * 关键差别不是线程多，而是**不排在网格队尾** —— 网格一次能排进几十张缩略图，
+     * 详情请求跟着排就要等前面全下完，看起来就是"点开半天不出图"。
+     */
+    public void loadDetail(final String path, final Callback cb) {
+        enqueue(path, cb, true);
+    }
+
+    private void enqueue(final String path, final Callback cb, final boolean detail) {
         final String u = url(path);
         if (u.isEmpty()) {
             cb.onFailed();
@@ -157,33 +202,66 @@ public class ImageLoader {
             return;
         }
 
-        // 同一张图并发请求只发一次
-        if (!inFlight.add(u)) return;
+        boolean first;
+        synchronized (waiters) {
+            List<Callback> list = waiters.get(u);
+            first = (list == null);
+            if (first) {
+                list = new ArrayList<>();
+                waiters.put(u, list);
+            }
+            list.add(cb);
+        }
+        if (!first) return;      // 已经有人在下了，等他的结果
 
-        pool.execute(new Runnable() {
-            @Override
-            public void run() {
-                // 取字节：磁盘 → 网络。开启离线缓存后，第二遍就不再走网络。
-                byte[] data = null;
-                File df = diskEnabled() ? diskFile(u) : null;
-                if (df != null && df.exists() && df.length() > 0) {
-                    data = readFile(df);
-                }
-                if (data == null) {
-                    data = fetchBytes(u);
-                    if (data != null && df != null) writeFile(df, data);
-                }
+        final Runnable job = new Runnable() {
+            @Override public void run() { fetchInto(u); }
+        };
+        try {
+            (detail ? detailPool : pool).execute(job);
+        } catch (Throwable t) {
+            finish(u, null);
+        }
+    }
 
-                final Bitmap bmp = data == null ? null : decode(data);
-                inFlight.remove(u);
-                if (bmp != null) cache.put(u, bmp);
-                ui.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bmp != null) cb.onLoaded(bmp);
-                        else cb.onFailed();
-                    }
-                });
+    /** 真正的下载：磁盘 → 网络（失败重试一次）→ 解码 → 落盘 → 分发。 */
+    private void fetchInto(String u) {
+        byte[] data = null;
+        File df = diskEnabled() ? diskFile(u) : null;
+        if (df != null && df.exists() && df.length() > 0) {
+            data = readFile(df);
+            if (data == null) df.delete();      // 半截文件，删了重下
+        }
+        if (data == null) {
+            data = fetchBytes(u);
+            // 建连本身可能被路由到坏路径（实测 0.4s ~ 66s 反复横跳），
+            // 失败就退避重来，最多 3 次；每次都是全新的连接，命中好路径就 1 秒内完成
+            for (int attempt = 1; data == null && attempt <= 2; attempt++) {
+                try { Thread.sleep(300L * attempt); } catch (InterruptedException ignored) { }
+                data = fetchBytes(u);
+            }
+
+            if (data != null && df != null) writeFile(df, data);
+        }
+
+        Bitmap bmp = data == null ? null : decode(data);
+        if (bmp != null) cache.put(u, bmp);
+        finish(u, bmp);
+    }
+
+    /** 把结果分发给所有等待者（主线程）。 */
+    private void finish(final String u, final Bitmap bmp) {
+        final List<Callback> cbs;
+        synchronized (waiters) {
+            cbs = waiters.remove(u);
+        }
+        if (cbs == null || cbs.isEmpty()) return;
+        ui.post(new Runnable() {
+            @Override public void run() {
+                for (Callback c : cbs) {
+                    if (bmp != null) c.onLoaded(bmp);
+                    else c.onFailed();
+                }
             }
         });
     }

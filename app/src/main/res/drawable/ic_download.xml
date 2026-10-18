@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  下载。替换下载量前面的「↓」字符，同时给详情页主按钮「下载 .cube」配一个白图标。
+
+  【形状为什么是"箭头 + 托盘"】
+  只有一根向下箭头，10.5dp 缩略卡尺寸下和「↓」没有区别；
+  加一条开口朝上的托盘线，缩到 10dp 也还能认出是"下载"而不是"下一步"。
+  托盘只在底部两端折一下，不做闭环，避免小尺寸糊成一坨。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- 竖杆 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:pathData="M12,3.8 L12,14.8" />
+
+    <!-- 箭头 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M6.9,9.8 L12,15 L17.1,9.8" />
+
+    <!-- 托盘 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="1.9"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M4.7,16.4 L4.7,19.7 L19.3,19.7 L19.3,16.4" />
+</vector>

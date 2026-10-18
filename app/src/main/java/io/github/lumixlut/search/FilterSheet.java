@@ -43,7 +43,20 @@ public final class FilterSheet {
     private FilterSheet() {}
 
     public static void show(Activity act, Store store, Store.Filter current, OnApply cb) {
+        show(act, store, current, true, true, cb);
+    }
+
+    /**
+     * @param showSort   是否显示「排序」维度。
+     *                   排行页是固定按下载量的榜，摆一个排序选项点了不生效等于骗人，那里传 false。
+     * @param showGenres 是否显示「题材」维度。
+     *                   排行页有自己的题材分段控件（且它的查询只认分段的值），
+     *                   弹层里再摆一份"点了不生效"的题材同样是骗人，那里也传 false。
+     */
+    public static void show(Activity act, Store store, Store.Filter current,
+                            boolean showSort, boolean showGenres, OnApply cb) {
         final Context c = act;
+        Ui.init(c);
 
         // 在副本上改，取消就什么都不影响
         final Store.Filter draft = new Store.Filter();
@@ -65,18 +78,23 @@ public final class FilterSheet {
 
         // --- 顶部把手 ---
         View handle = new View(c);
-        handle.setBackground(Ui.round(0xFFD8DBE0, 2f, c, null));
+        handle.setBackground(Ui.round(Ui.HANDLE, 2f, c, null));
         LinearLayout.LayoutParams hp = new LinearLayout.LayoutParams(
                 Ui.dp(c, 36), Ui.dp(c, 4));
         hp.gravity = Gravity.CENTER_HORIZONTAL;
         sheet.addView(handle, hp);
 
-        // --- 标题行 ---
+        // --- 标题行：漏斗图标 + 「筛选」 ---
         LinearLayout head = Ui.row(c);
         head.setPadding(Ui.dp(c, 18), Ui.dp(c, 14), Ui.dp(c, 18), Ui.dp(c, 8));
-        TextView title = Ui.h1(c, "筛选");
-        head.addView(title, Ui.lpWeight(1f));
-        TextView reset = Ui.text(c, "重置", 13f, Ui.TEXT_SUB, false);
+        LinearLayout titleBox = Ui.row(c);
+        titleBox.addView(Ui.icon(c, R.drawable.ic_filter, 16f, Ui.ACCENT));
+        TextView title = Ui.h1(c, c.getString(R.string.filter_title));
+        LinearLayout.LayoutParams tlp = Ui.lpWrap();
+        tlp.leftMargin = Ui.dp(c, 7);
+        titleBox.addView(title, tlp);
+        head.addView(titleBox, Ui.lpWeight(1f));
+        TextView reset = Ui.text(c, c.getString(R.string.filter_reset), 13f, Ui.TEXT_SUB, false);
         reset.setPadding(Ui.dp(c, 10), Ui.dp(c, 6), Ui.dp(c, 10), Ui.dp(c, 6));
         head.addView(reset, Ui.lpWrap());
         sheet.addView(head);
@@ -114,11 +132,13 @@ public final class FilterSheet {
             if (refresh[0] != null) refresh[0].run();
         };
 
-        // 题材
-        addGroup(c, bodyCol, "题材", new String[][]{
-                {"movie", "视频"},
-                {"still", "照片"},
-        }, draft.genres, store, draft, Store.FACET_GENRE, recount, onToggle);
+        // 题材（排行页有自己的题材分段，那边不显示这一组，见 showGenres）
+        if (showGenres) {
+            addGroup(c, bodyCol, c.getString(R.string.filter_group_genre), new String[][]{
+                    {"movie", c.getString(R.string.filter_genre_movie)},
+                    {"still", c.getString(R.string.filter_genre_still)},
+            }, draft.genres, store, draft, Store.FACET_GENRE, recount, onToggle);
+        }
 
         // 格调：只用本地真的有的
         List<String[]> styleOpts = new ArrayList<>();
@@ -127,26 +147,29 @@ public final class FilterSheet {
             styleOpts.add(new String[]{e.getKey(), e.getKey()});
         }
         if (!styleOpts.isEmpty()) {
-            addGroup(c, bodyCol, "格调", styleOpts.toArray(new String[0][]),
+            addGroup(c, bodyCol, c.getString(R.string.filter_group_style), styleOpts.toArray(new String[0][]),
                     draft.styles, store, draft, Store.FACET_STYLE, recount, onToggle);
         } else {
-            hintNeedEnrich(c, bodyCol, "格调");
+            hintNeedEnrich(c, bodyCol, c.getString(R.string.filter_group_style));
         }
 
         // 国家
         if (!ctry.isEmpty()) {
             List<String[]> cOpts = new ArrayList<>();
             for (String[] row : ctry) cOpts.add(new String[]{row[0], row[0]});
-            addGroup(c, bodyCol, "国家", cOpts.toArray(new String[0][]),
+            addGroup(c, bodyCol, c.getString(R.string.filter_group_country), cOpts.toArray(new String[0][]),
                     draft.countries, store, draft, Store.FACET_COUNTRY, recount, onToggle);
         }
 
-        // 排序（单选）
+        // 排序（单选）—— 排行页传 showSort=false，整段不出现
         final int[] sortSel = {draft.sort};
-        addSingleGroup(c, bodyCol, "排序",
-                new String[]{"下载量", "名称"},
-                sortSel[0] == Store.SORT_TITLE ? 1 : 0,
-                idx -> { sortSel[0] = (idx == 1 ? Store.SORT_TITLE : Store.SORT_DOWNLOADS); });
+        if (showSort) {
+            addSingleGroup(c, bodyCol, c.getString(R.string.filter_group_sort),
+                    new String[]{c.getString(R.string.filter_sort_downloads),
+                            c.getString(R.string.filter_sort_title)},
+                    sortSel[0] == Store.SORT_TITLE ? 1 : 0,
+                    idx -> { sortSel[0] = (idx == 1 ? Store.SORT_TITLE : Store.SORT_DOWNLOADS); });
+        }
 
         ScrollView sv = new ScrollView(c);
         sv.addView(bodyCol);
@@ -160,8 +183,8 @@ public final class FilterSheet {
         LinearLayout foot = Ui.row(c);
         foot.setPadding(Ui.dp(c, 18), Ui.dp(c, 12), Ui.dp(c, 18), 0);
 
-        final TextView btnReset = Ui.ghostBtn(c, "重置");
-        final TextView btnOk = Ui.primaryBtn(c, "确定");
+        final TextView btnReset = Ui.ghostBtn(c, c.getString(R.string.filter_reset));
+        final TextView btnOk = Ui.primaryBtn(c, c.getString(R.string.filter_confirm));
 
         btnReset.setOnClickListener(v -> {
             draft.genres.clear();
@@ -188,7 +211,9 @@ public final class FilterSheet {
         // 确定按钮上显示当前选了几项
         refresh[0] = () -> {
             int n = draft.genres.size() + draft.styles.size() + draft.countries.size();
-            btnOk.setText(n == 0 ? "全部 " + totalAll + " 枚" : "应用（" + n + " 项）");
+            btnOk.setText(n == 0
+                    ? c.getString(R.string.filter_ok_all_fmt, totalAll)
+                    : c.getString(R.string.filter_ok_applied_fmt, n));
         };
 
         dlg.setContentView(sheet);
@@ -210,7 +235,7 @@ public final class FilterSheet {
 
     /** 库里还没补齐格调时的提示。 */
     private static void hintNeedEnrich(Context c, LinearLayout parent, String what) {
-        TextView t = Ui.sub(c, "本地还没有" + what + "数据 —— 先回主界面点「补齐格调」。");
+        TextView t = Ui.sub(c, c.getString(R.string.filter_need_enrich_fmt, what));
         t.setPadding(0, Ui.dp(c, 4), 0, Ui.dp(c, 4));
         parent.addView(t);
     }

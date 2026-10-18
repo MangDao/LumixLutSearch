@@ -58,6 +58,7 @@ public class SearchActivity extends Activity {
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
+        Ui.init(this);
         store = new Store(this);
         setContentView(buildUi());
         showIdle();
@@ -84,11 +85,12 @@ public class SearchActivity extends Activity {
         // ---- 顶栏：返回 + 输入框 + 搜索 ----
         LinearLayout bar = Ui.row(this);
         bar.setBackgroundColor(Ui.CARD);
-        bar.setPadding(dp(10), dp(10), dp(12), dp(10));
+        // 返回键改成 48dp 图标按钮后自己带高度了，纵向内边距要压到 2dp，
+        // 否则顶栏会比原来那个「←」字符高出一截。
+        bar.setPadding(dp(4), dp(2), dp(12), dp(2));
 
-        TextView back = Ui.text(this, "←", 20f, Ui.TEXT, false);
-        back.setPadding(dp(6), dp(2), dp(10), dp(2));
-        back.setOnClickListener(v -> finish());
+        View back = Ui.iconButton(this, R.drawable.ic_back, 22f, Ui.TEXT,
+                Ui.ICON_TOUCH, getString(R.string.cd_back), this::finish);
         bar.addView(back, Ui.lpWrap());
 
         LinearLayout box = Ui.row(this);
@@ -96,7 +98,7 @@ public class SearchActivity extends Activity {
         box.setPadding(dp(12), 0, dp(12), 0);
 
         input = new EditText(this);
-        input.setHint("搜标题 / 创作者 / 简介");
+        input.setHint(getString(R.string.search_hint));
         input.setHintTextColor(Ui.TEXT_WEAK);
         input.setTextColor(Ui.TEXT);
         input.setTextSize(14f);
@@ -106,15 +108,16 @@ public class SearchActivity extends Activity {
         input.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
         box.addView(input, Ui.lpWeight(1f));
 
-        TextView clear = Ui.text(this, "✕", 14f, Ui.TEXT_WEAK, false);
-        clear.setPadding(dp(8), dp(4), 0, dp(4));
-        clear.setOnClickListener(v -> { input.setText(""); showIdle(); });
+        // 清空叉被胶囊高度卡着，触控只能给到 40dp —— 比独立按钮小一号，
+        // 但它在输入框里，拇指本来就在附近，是折中而不是疏忽。
+        View clear = Ui.iconButton(this, R.drawable.ic_close, 16f, Ui.TEXT_WEAK, 40f,
+                getString(R.string.cd_clear), () -> { input.setText(""); showIdle(); });
         box.addView(clear, Ui.lpWrap());
 
         LinearLayout.LayoutParams bp = Ui.lpWeight(1f);
         bar.addView(box, bp);
 
-        TextView go = Ui.text(this, "搜索", 14f, Ui.ACCENT, true);
+        TextView go = Ui.text(this, getString(R.string.search_action), 14f, Ui.ACCENT, true);
         go.setPadding(dp(12), dp(4), dp(2), dp(4));
         go.setOnClickListener(v -> doSearch(input.getText().toString()));
         LinearLayout.LayoutParams gp = Ui.lpWrap();
@@ -177,19 +180,19 @@ public class SearchActivity extends Activity {
                 body.removeAllViews();
 
                 if (hits.isEmpty()) {
-                    TextView t = Ui.sub(this, "没有匹配「" + q + "」的 LUT。");
+                    TextView t = Ui.sub(this, getString(R.string.search_no_suggest_fmt, q));
                     t.setPadding(0, dp(6), 0, dp(10));
                     body.addView(t);
-                    TextView go = Ui.ghostBtn(this, "仍然搜索「" + q + "」");
+                    TextView go = Ui.ghostBtn(this, getString(R.string.search_still_search_fmt, q));
                     go.setOnClickListener(v -> doSearch(q));
                     body.addView(go, Ui.lpMatch());
                     return;
                 }
 
-                body.addView(sectionHead("建议", hits.size()));
+                body.addView(sectionHead(getString(R.string.search_suggest), hits.size()));
                 for (final Lut l : hits) body.addView(suggestRow(l, q));
 
-                TextView all = Ui.ghostBtn(this, "搜索「" + q + "」查看全部结果");
+                TextView all = Ui.ghostBtn(this, getString(R.string.search_all_results_fmt, q));
                 all.setOnClickListener(v -> doSearch(q));
                 LinearLayout.LayoutParams ap = Ui.lpMatch();
                 ap.topMargin = dp(6);
@@ -204,10 +207,9 @@ public class SearchActivity extends Activity {
         r.setBackground(Ui.round(Ui.CARD, Ui.R_CARD, this, Ui.LINE));
         r.setPadding(dp(14), dp(12), dp(14), dp(12));
 
-        TextView arrow = Ui.text(this, "🔍", 12f, Ui.TEXT_WEAK, false);
         LinearLayout.LayoutParams arp = Ui.lpWrap();
         arp.rightMargin = dp(10);
-        r.addView(arrow, arp);
+        r.addView(Ui.icon(this, R.drawable.ic_search, 13f, Ui.TEXT_WEAK), arp);
 
         LinearLayout col = Ui.col(this);
         TextView t = Ui.text(this, l.title.isEmpty() ? l.code : l.title, 14f, Ui.TEXT, true);
@@ -228,8 +230,8 @@ public class SearchActivity extends Activity {
 
         r.addView(col, Ui.lpWeight(1f));
 
-        TextView d = Ui.text(this, "↓ " + Ui.compact(l.downloads), 11f, Ui.ACCENT, true);
-        r.addView(d, Ui.lpWrap());
+        r.addView(Ui.stat(this, R.drawable.ic_download,
+                Ui.compact(l.downloads), 11f, Ui.ACCENT, true), Ui.lpWrap());
 
         LinearLayout.LayoutParams lp = Ui.lpMatch();
         lp.bottomMargin = dp(8);
@@ -254,8 +256,8 @@ public class SearchActivity extends Activity {
         List<String> hist = Prefs.history(this);
         if (!hist.isEmpty()) {
             LinearLayout head = Ui.row(this);
-            head.addView(Ui.sectionTitle(this, "搜索历史"), Ui.lpWeight(1f));
-            TextView clr = Ui.text(this, "清空", 12f, Ui.TEXT_SUB, false);
+            head.addView(Ui.sectionTitle(this, getString(R.string.search_history)), Ui.lpWeight(1f));
+            TextView clr = Ui.text(this, getString(R.string.search_history_clear), 12f, Ui.TEXT_SUB, false);
             clr.setPadding(dp(8), dp(6), 0, dp(6));
             clr.setOnClickListener(v -> {
                 Prefs.clearHistory(this);
@@ -272,6 +274,7 @@ public class SearchActivity extends Activity {
                 TextView c = Ui.chip(this, h, false);
                 c.setOnClickListener(v -> { input.setText(h); doSearch(h); });
                 c.setOnLongClickListener(v -> {
+                    Ui.longPress(v);              // 长按删除是"破坏性"动作，先震一下再删
                     Prefs.removeHistory(this, h);
                     showIdle();
                     return true;
@@ -280,7 +283,7 @@ public class SearchActivity extends Activity {
             }
             body.addView(wrap);
 
-            TextView tip = Ui.text(this, "长按可删除单条", 10f, Ui.TEXT_WEAK, false);
+            TextView tip = Ui.text(this, getString(R.string.search_history_tip), 10f, Ui.TEXT_WEAK, false);
             tip.setPadding(0, 0, 0, dp(4));
             body.addView(tip);
         }
@@ -288,7 +291,7 @@ public class SearchActivity extends Activity {
         // 热门：本地下载量前 12 的名字，点一下直接搜
         List<Lut> hot = store.ranking(12, null);
         if (!hot.isEmpty()) {
-            body.addView(Ui.sectionTitle(this, "热门搜索"));
+            body.addView(Ui.sectionTitle(this, getString(R.string.search_hot)));
             LinearLayout wrap = Ui.col(this);
             LinearLayout cur = null;
             for (int i = 0; i < hot.size(); i++) {
@@ -305,14 +308,14 @@ public class SearchActivity extends Activity {
             }
             body.addView(wrap);
             TextView tip2 = Ui.text(this,
-                    "按本地记录的真实下载量排序，取前 12 个名字作为热词。",
+                    getString(R.string.search_hot_note),
                     10f, Ui.TEXT_WEAK, false);
             tip2.setPadding(0, 0, 0, 0);
             body.addView(tip2);
         }
 
         if (hist.isEmpty() && hot.isEmpty()) {
-            body.addView(Ui.sub(this, "本地库还是空的 —— 先回主界面做一次「预载全部」。"));
+            body.addView(Ui.sub(this, getString(R.string.search_empty_lib)));
         }
     }
 
@@ -330,7 +333,7 @@ public class SearchActivity extends Activity {
         input.clearFocus();
 
         body.removeAllViews();
-        body.addView(Ui.sub(this, "搜索中…"));
+        body.addView(Ui.sub(this, getString(R.string.search_running)));
 
         pool.execute(() -> {
             Store.Filter f = new Store.Filter();
@@ -345,25 +348,23 @@ public class SearchActivity extends Activity {
         body.removeAllViews();
 
         if (g.total() == 0) {
-            TextView t = Ui.body(this, "没有找到「" + q + "」。");
+            TextView t = Ui.body(this, getString(R.string.search_not_found_fmt, q));
             t.setPadding(0, dp(6), 0, dp(10));
             body.addView(t);
-            body.addView(Ui.sub(this,
-                    "试试短一点的关键词（比如只打首字母）；\n"
-                  + "或者到「筛选」页按格调 / 国家浏览全部 199 枚。"));
+            body.addView(Ui.sub(this, getString(R.string.search_try_shorter)));
             return;
         }
 
-        TextView sum = Ui.sub(this, "共 " + g.total() + " 条命中");
+        TextView sum = Ui.sub(this, getString(R.string.search_total_fmt, g.total()));
         sum.setPadding(0, 0, 0, dp(6));
         body.addView(sum);
 
         if (!g.byName.isEmpty()) {
-            body.addView(sectionHead("标题 / 创作者命中", g.byName.size()));
+            body.addView(sectionHead(getString(R.string.search_group_title_creator), g.byName.size()));
             for (Lut l : g.byName) body.addView(rowFor(l));
         }
         if (!g.byDesc.isEmpty()) {
-            body.addView(sectionHead("简介中出现", g.byDesc.size()));
+            body.addView(sectionHead(getString(R.string.search_group_desc), g.byDesc.size()));
             for (Lut l : g.byDesc) body.addView(rowFor(l));
         }
     }
@@ -426,10 +427,10 @@ public class SearchActivity extends Activity {
         mp.topMargin = dp(3);
         col.addView(m, mp);
 
-        TextView d = Ui.text(this, "↓ " + Ui.num(l.downloads), 11f, Ui.ACCENT, true);
-        LinearLayout.LayoutParams dp2 = Ui.lpMatch();
-        dp2.topMargin = dp(3);
-        col.addView(d, dp2);
+        LinearLayout.LayoutParams dlp = Ui.lpMatch();
+        dlp.topMargin = dp(3);
+        col.addView(Ui.stat(this, R.drawable.ic_download,
+                Ui.num(l.downloads), 11f, Ui.ACCENT, true), dlp);
 
         card.addView(col, Ui.lpWeight(1f));
 

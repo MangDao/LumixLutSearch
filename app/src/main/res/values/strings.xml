@@ -1,7 +1,356 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  界面文案唯一真源。
+
+  约定（2026-10-18 引入，做 strings.xml 迁移时定下，别随意破坏）：
+    1. 命名  <屏>_<用途>：settings_cache_desc / rank_empty / dl_btn_clear
+    2. 带参数的加 _fmt 后缀，用位置占位符 %1$s / %2$d（**别用裸 %s**，将来换语序不用改代码）
+    3. 换行写 \n；中文引号「」直接用；& < ' 需转义；带参字符串里的 % 要写 %%
+       **以空格开头/结尾的文案必须整段用双引号包住**（`" · 按下载量"`），
+       否则 AAPT 会把首尾 ASCII 空格吃掉 —— 实测踩过：`·` 前少一个空格，榜单摘要整行左移。
+       全角空格 U+3000（　）不会被吃，可以放心用
+    4. **不搬的**：格式化/单位片段（Ui.compact 的 "%.1f万"、以及代码里拼的 " 枚"/"枚 · "）、
+       日志 tag、异常消息（IOException 文案留在 throw 处，翻堆栈时最省事）
+    5. 数组类文案用 <string-array>，数组里的"键"（如自动更新的 open/1d/3d）仍留在代码，
+       文案与键分开，别混成一张表
+-->
 <resources>
     <string name="app_name">LUT 搜索器</string>
     <string name="dl_title">我的下载</string>
+    <!-- 松下 25 周年专题（松影俱乐部 lcid=113）。这套 LUT 不在 LUMIX Lab 目录里 -->
+    <string name="anniv_section">松下25周年专属及官方lut</string>
+    <string name="anniv_more">更多 ›</string>
+    <string name="anniv_badge">松下 25 周年专属 LUT</string>
+    <string name="anniv_badge_short">25th</string>
+    <string name="anniv_source">素材与介绍来自松影俱乐部（panasonicshuma.cn），非官方镜像</string>
+    <string name="anniv_hint">← 拖动把手对比「原图 / LUT 效果」 → 素材由松影俱乐部提供</string>
+    <string name="anniv_base_fmt">基于 %1$s</string>
+    <string name="anniv_dl_btn">下载 .cube</string>
+    <string name="anniv_dl_busy">正在下载…</string>
+    <string name="anniv_dl_done_title">下载完成</string>
+    <string name="anniv_dl_done_fmt">已保存 %1$d 个 .cube：\n%2$s\n\n保存到：%3$s</string>
+    <string name="anniv_dl_fail">下载失败</string>
+    <!-- 松影俱乐部的 LUT 专栏（四分类） -->
+    <string name="songying_title">松下25周年专属及官方lut</string>
+    <string name="songying_sub">素材与介绍来自松影俱乐部（panasonicshuma.cn）· 本工具非官方</string>
+    <string name="songying_vlt">VLT</string>
+    <string name="songying_empty">这个分类里暂时没有条目</string>
+    <!-- 官方把 warm/cool 两版挂在同一个预览图上，详情里只能说清这一点，别再画一张假对比图 -->
+    <string name="songying_shared_compare">官方两版共用同一张对比图</string>
+    <!-- 包里可能是 .cube、.vlt 或两者都有，按钮和完成文案都按实际扩展名写，别一律写 .cube -->
+    <string name="songying_dl_fmt">下载 %1$s</string>
+    <string name="songying_dl_done_fmt">已保存 %1$d 个文件：\n%2$s\n\n保存到：%3$s</string>
     <string name="set_title">设置</string>
     <string name="search_title">搜索</string>
+
+    <!--
+      图标的无障碍文案。
+      图标本身没有文字，TalkBack 只能靠 content-description 念出来 ——
+      以前用 🔍 / ✕ 字符时它会把"放大镜""叉号"照念，换成矢量图就必须自己补。
+    -->
+    <string name="cd_search">搜索</string>
+    <string name="cd_close">关闭</string>
+    <string name="cd_clear">清空</string>
+    <string name="cd_back">返回</string>
+    <string name="cd_filter">筛选</string>
+    <string name="cd_download">下载</string>
+
+    <!-- ============================================================ 通用短词（一处定义、多处复用） -->
+    <string name="common_expand">展开</string>
+    <string name="common_collapse">收起</string>
+    <string name="common_ok">好</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_close">关闭</string>
+    <string name="common_delete">删除</string>
+    <string name="common_clear">清空</string>
+    <string name="common_expand_all">展开全部</string>
+    <string name="common_all">全部</string>
+
+    <!-- ============================================================ 底栏 -->
+    <string name="tab_discover">发现</string>
+    <string name="tab_rank">排行</string>
+    <string name="tab_filter">筛选</string>
+    <string name="tab_mine">我的</string>
+
+    <!-- ============================================================ 发现页 -->
+    <string name="discover_seg_all_fmt">全部 %1$d</string>
+    <string name="discover_seg_movie_fmt">视频 %1$d</string>
+    <string name="discover_seg_still_fmt">照片 %1$d</string>
+    <string name="discover_empty_lib">本地库是空的 —— 去「我的」点「立即更新一次」。</string>
+    <string name="discover_empty_genre">这个题材下还没有数据。</string>
+    <string name="discover_hot">热门推荐</string>
+    <string name="discover_styles">按格调浏览</string>
+    <string name="discover_styles_empty">还没有格调数据 —— 点下面「补齐格调」后这里会出现分类。</string>
+    <string name="discover_styles_hint_fmt">共 %1$d 个格调，点「展开」看全部</string>
+    <string name="discover_lib_section">本地库</string>
+    <string name="discover_preload">预载全部</string>
+    <string name="discover_enrich">补齐格调</string>
+    <string name="discover_style_dist">格调分布</string>
+    <string name="discover_foot_fmt">LUT 搜索器 %1$s　数据来源：LUMIX Lab 官方接口。本工具非官方、与 Panasonic 无关联。\n服务端目录实测共 199 条，本地库即全量。搜索与筛选全部在本地 SQL 完成。</string>
+
+    <!-- ============================================================ 我的 -->
+    <string name="mine_title">我的</string>
+    <string name="mine_section_content">内容</string>
+    <string name="mine_downloads">我的下载</string>
+    <string name="mine_downloads_sub_fmt">本工具下载过的 %1$d 枚 .cube</string>
+    <string name="mine_settings">设置</string>
+    <string name="mine_settings_sub">自动更新频率 · 离线样张缓存</string>
+    <string name="mine_lib_section">本地库</string>
+    <string name="mine_lib_state_fmt">已收录 %1$d 枚，已补格调 %2$d 枚</string>
+    <string name="mine_sync_fmt">上次同步：%1$s</string>
+    <string name="mine_about">关于</string>
+    <string name="mine_about_body">LUMIX Lab 社区 LUT 的搜索 / 筛选 / 下载工具。\n非官方，与 Panasonic 无任何关联。\n\n数据来自 LUMIX Lab 官方接口；筛选维度均为服务端真实字段，无文本推断。服务端不支持检索与排序，因此全部在本地 SQL 完成。\n\n本工具不打包、不分发任何 LUT 文件 —— 下载始终直连官方接口。</string>
+
+    <!-- 首次引导 -->
+    <string name="firstrun_title">第一次使用</string>
+    <string name="firstrun_message">选择怎么把社区 LUT 目录拉到本地：\n\n【完整预载】推荐\n  拉目录 + 逐条补齐格调与官方样张。\n  约 3 分钟。补齐后才能按格调筛选、才能看滑动对比。\n\n【快速开始】\n  只拉名称 / 创作者 / 题材 / 国家 / 下载量，约 30 秒。\n  格调与样张之后随时可以在「发现」页补齐。</string>
+    <string name="firstrun_full">完整预载</string>
+    <string name="firstrun_quick">快速开始</string>
+
+    <!-- ============================================================ 榜单 -->
+    <string name="rank_title">榜单</string>
+    <string name="rank_board_lut">LUT 榜</string>
+    <string name="rank_board_creator">作者榜</string>
+    <string name="rank_sort_lut">按下载量排序</string>
+    <string name="rank_sort_creator">按总下载量排序</string>
+    <string name="rank_only_fmt">只看 %1$s  ✕</string>
+    <string name="rank_hit_none">没有命中</string>
+    <string name="rank_hit_fmt">命中 %1$d 枚</string>
+    <string name="rank_creators_fmt">共 %1$d 位作者</string>
+    <string name="rank_note_lut">" · 按下载量"</string>
+    <string name="rank_note_creator">" · 按总下载量（每枚 LUT 的下载量求和）"</string>
+    <string name="rank_style_fmt">" · 格调 %1$s"</string>
+    <string name="rank_country_fmt">" · 国家 %1$s"</string>
+    <string name="rank_empty_creator">没有符合条件的作者</string>
+    <string name="rank_empty_lut">没有符合条件的 LUT</string>
+    <string name="rank_empty_lut_by_creator">这位作者没有符合条件的 LUT</string>
+
+    <!-- ============================================================ 筛选 Tab -->
+    <string name="filter_tab_cond">筛选条件</string>
+    <string name="filter_tab_empty_hint">格调与题材是互斥的（VLOG 只属于视频，其余格调都属于照片），\n所以「照片 + VLOG」这类组合本来就是空的。\n减少一个条件试试。</string>
+    <string name="filter_tab_clear">清空条件，看全部</string>
+    <string name="filter_sum_hit_fmt">命中 %1$d 枚</string>
+    <string name="filter_sum_genre_fmt">题材 %1$d</string>
+    <string name="filter_sum_style_fmt">格调 %1$d</string>
+    <string name="filter_sum_country_fmt">国家 %1$d</string>
+    <string name="filter_sum_creator">创作者</string>
+    <string name="filter_sum_parts_fmt">　（%1$s）</string>
+    <string name="filter_sum_keyword_fmt">　关键词「%1$s」</string>
+    <string name="filter_sum_shared_hint">条件与「排行」页共用，切过去也一样</string>
+
+    <!-- ============================================================ 同步 / 预载 / 补齐 -->
+    <string name="sync_auto_done_fmt">已自动更新目录（%1$d 条）</string>
+    <string name="sync_done_fmt">已同步 %1$d 条</string>
+    <string name="sync_failed_fmt">更新失败：%1$s</string>
+    <string name="sync_throttled_fmt">请求被限流，第 %1$d 次重试，等 %2$d 秒…</string>
+    <string name="sync_progress_fmt">进度 %1$d / %2$d</string>
+    <string name="sync_catalog_busy">更新目录…</string>
+    <string name="sync_fetching">正在拉取</string>
+
+    <string name="preload_title">预载全部</string>
+    <string name="preload_message_fmt">拉取目录 + 逐条补齐格调与官方样张。\n已补 %1$d / %2$d 枚。\n已完成的部分会跳过。</string>
+    <string name="preload_start">开始</string>
+    <string name="preload_running">预载中…</string>
+    <string name="sync_catalog_running">同步目录…</string>
+    <string name="busy_preparing">准备中</string>
+    <string name="preload_fetch_catalog">拉取目录…</string>
+    <string name="preload_enrich_step_fmt">补齐第 %1$d/%2$d 枚</string>
+    <string name="done_title">完成</string>
+    <string name="done_message_fmt">目录 %1$d 条\n补齐 %2$d 枚\n本地共 %3$d 枚</string>
+    <string name="error_title">出错了</string>
+
+    <string name="enrich_all_done">格调与样张都已补齐</string>
+    <string name="enrich_title">补齐格调 / 样张</string>
+    <string name="enrich_message_fmt">待补 %1$d 枚，约 %2$d 分钟（服务端限流，快不了）。\n补齐后才有官方原图可做滑动对比。\n也可以先补下载量最高的 60 枚。</string>
+    <string name="enrich_first_60">补 60 枚</string>
+    <string name="enrich_all">全部</string>
+    <string name="enrich_running">补齐中…</string>
+    <string name="enrich_step_fmt">第 %1$d/%2$d 枚</string>
+    <string name="enrich_done_fmt">补齐 %1$d 枚</string>
+
+    <string name="styles_empty">还没有格调数据，先「补齐格调」</string>
+    <string name="styles_dist_title">格调分布</string>
+    <string name="styles_dist_head_fmt">本地已补 %1$d 枚\n\n</string>
+    <string name="styles_dist_row_fmt">%-12s %3d 枚   %s 次\n</string>
+    <string name="styles_dist_note">\n格调代号取自官方源码，均为真实字段。</string>
+
+    <!-- ============================================================ 详情弹层 -->
+    <string name="detail_no_before_hint">官方未提供该 LUT 的原图，只显示效果图</string>
+    <string name="detail_no_sample">这枚 LUT 没有官方样张</string>
+    <string name="detail_no_sample_hint">样张要补齐详情才有：回「发现」点「补齐格调」</string>
+    <string name="detail_download_btn">下载 .cube</string>
+    <string name="detail_label_creator">创作者：</string>
+    <string name="detail_label_genre">题材：</string>
+    <string name="detail_label_style">格调：</string>
+    <string name="detail_label_country">国家：</string>
+    <string name="detail_label_downloads">下载量：</string>
+    <string name="detail_style_missing">未补齐</string>
+    <string name="detail_overview_prefix">\n简介：</string>
+    <string name="detail_foot">\n\n点「下载」走官方接口取 33-grid .cube（17-grid 会被 LUMIX Lab 拒绝）。\n样张为官方提供的对照图，非本工具生成。</string>
+    <string name="detail_samples_loading_fmt">样张加载中… 已就绪 %1$d/2</string>
+    <string name="detail_samples_ready">← 拖动把手对比「原图 / LUT 效果」→　样张由官方提供</string>
+    <string name="detail_samples_after_only">（官方未提供该 LUT 的原图，只显示效果图）</string>
+    <string name="detail_samples_failed">样张加载失败 · 点这里重试</string>
+
+    <!-- ============================================================ 下载 -->
+    <string name="dl_busy">下载中…</string>
+    <string name="dl_failed">下载失败</string>
+    <string name="dl_done_title">下载完成</string>
+    <string name="dl_done_message_fmt">已解出：%1$s\n保存到：%2$s\n官方包 %3$s 字节\n\n社区 code：%4$s\n（导入的 LUT 不带这个 code，所以在 LUMIX Lab 里没有「Check Details」）\n\n接下来在 LUMIX Lab 里：\n  LUT库 → 设备 → 导入LUT → 在「下载」里选 %5$s</string>
+    <string name="dl_open_lumix">打开 LUMIX Lab</string>
+    <string name="dl_open_other">用其他应用打开</string>
+    <string name="dl_lumix_missing">无法启动 LUMIX Lab</string>
+    <string name="dl_no_app">系统没有能打开 .cube 的应用 —— 按上面的路径在 LUMIX Lab 里导入</string>
+    <string name="dl_not_in_lib">这枚 LUT 不在本地库里</string>
+
+    <!-- ============================================================ 我的下载页 -->
+    <string name="dlpage_refresh">刷新</string>
+    <string name="dlpage_open_dir">打开文件夹</string>
+    <string name="dlpage_clear">清空…</string>
+    <string name="dlpage_foot_fmt">文件保存在公共「下载/%1$s/」，任何文件管理器都能看到。\n导入 LUMIX Lab：LUT库 → 设备 → 导入LUT → 选这里的文件。</string>
+    <string name="dlpage_count_fmt">共 %1$d 枚</string>
+    <string name="dlpage_missing_fmt">，其中 %1$d 枚文件已不在</string>
+    <string name="dlpage_row_missing">"  ·  ⚠ 文件已不在"</string>
+
+    <string name="dlpage_actions_path_fmt">位置：%1$s</string>
+    <string name="dlpage_actions_lut_fmt">\n对应 LUT：%1$s</string>
+    <string name="dlpage_path_unknown">（未记录）</string>
+    <string name="dlpage_open">打开</string>
+    <string name="dlpage_share">分享</string>
+    <string name="dlpage_delete_ellipsis">删除…</string>
+    <string name="dlpage_no_path">这条记录没有可用路径</string>
+    <string name="dlpage_no_opener_fmt">系统里没有能打开 .cube 的应用 —— 用文件管理器打开「下载/%1$s/」即可</string>
+    <string name="dlpage_share_chooser_fmt">分享 %1$s</string>
+    <string name="dlpage_share_failed_fmt">分享失败：%1$s</string>
+
+    <string name="dlpage_delete_title">删除</string>
+    <string name="dlpage_delete_message_fmt">%1$s\n\n「删除文件」会连公共下载目录里的这个 .cube 一起删掉，删了就找不回来（要重新下载）。\n只想让这条从列表里消失、文件留着，就选「只删记录」。</string>
+    <string name="dlpage_delete_both">删除文件+记录</string>
+    <string name="dlpage_delete_record_only">只删记录</string>
+    <string name="dlpage_deleted_both">已删除文件与记录</string>
+    <string name="dlpage_deleted_record_only">已移除记录，文件保留</string>
+    <string name="dlpage_delete_file_failed">文件没删掉（可能不属于本应用），记录已移除</string>
+
+    <string name="dlpage_clear_title">清空</string>
+    <string name="dlpage_clear_message_fmt">共 %1$d 条记录。\n\n「只清记录」：列表清空，.cube 文件全部保留。\n「连文件一起删」：把公共下载目录里的这些 .cube 也删掉，删了要重新下载。</string>
+    <string name="dlpage_clear_both">连文件一起删</string>
+    <string name="dlpage_clear_records">只清记录</string>
+    <string name="dlpage_cleared_with_files_fmt">已清空记录，删掉 %1$d 个文件</string>
+    <string name="dlpage_cleared_keep_files">已清空记录，文件保留</string>
+    <string name="dlpage_already_empty">记录已经是空的</string>
+    <string name="dlpage_no_file_manager_fmt">没有文件管理器能直接打开这个目录。\n路径：下载/%1$s/</string>
+
+    <!-- ============================================================ 详情 / 对比控件 -->
+    <string name="detail_badge_before">原图</string>
+    <string name="detail_badge_after">效果</string>
+    <string name="detail_before_pending">原图加载中…</string>
+    <string name="common_never_synced">从未同步</string>
+
+    <!-- ============================================================ 搜索页 -->
+    <string name="search_hint">搜标题 / 创作者 / 简介</string>
+    <string name="search_action">搜索</string>
+    <string name="search_no_suggest_fmt">没有匹配「%1$s」的 LUT。</string>
+    <string name="search_still_search_fmt">仍然搜索「%1$s」</string>
+    <string name="search_suggest">建议</string>
+    <string name="search_all_results_fmt">搜索「%1$s」查看全部结果</string>
+
+    <string name="search_history">搜索历史</string>
+    <string name="search_history_clear">清空</string>
+    <string name="search_history_tip">长按可删除单条</string>
+    <string name="search_hot">热门搜索</string>
+    <string name="search_hot_note">按本地记录的真实下载量排序，取前 12 个名字作为热词。</string>
+    <string name="search_empty_lib">本地库还是空的 —— 先回主界面做一次「预载全部」。</string>
+
+    <string name="search_running">搜索中…</string>
+    <string name="search_not_found_fmt">没有找到「%1$s」。</string>
+    <string name="search_try_shorter">试试短一点的关键词（比如只打首字母）；\n或者到「筛选」页按格调 / 国家浏览全部 199 枚。</string>
+    <string name="search_total_fmt">共 %1$d 条命中</string>
+    <string name="search_group_title_creator">标题 / 创作者命中</string>
+    <string name="search_group_desc">简介中出现</string>
+
+    <!-- ============================================================ 筛选面板 -->
+    <string name="filter_title">筛选</string>
+    <string name="filter_reset">重置</string>
+    <string name="filter_confirm">确定</string>
+    <string name="filter_group_genre">题材</string>
+    <string name="filter_group_style">格调</string>
+    <string name="filter_group_country">国家</string>
+    <string name="filter_group_sort">排序</string>
+    <string name="filter_genre_movie">视频</string>
+    <string name="filter_genre_still">照片</string>
+    <string name="filter_sort_downloads">下载量</string>
+    <string name="filter_sort_title">名称</string>
+    <string name="filter_need_enrich_fmt">本地还没有%1$s数据 —— 先回主界面点「补齐格调」。</string>
+    <string name="filter_ok_all_fmt">全部 %1$d 枚</string>
+    <string name="filter_ok_applied_fmt">应用（%1$d 项）</string>
+
+    <!-- ============================================================ 设置页 -->
+    <string name="settings_sync_section">自动更新本地 LUT 库</string>
+    <!-- 一级列表的行标题与摘要（设置页两级化的 2026-10-18） -->
+    <string name="settings_entry_sync">自动更新</string>
+    <string name="settings_row_sync_fmt">%1$s · 上次同步 %2$s</string>
+    <string name="settings_row_cache_fmt">已缓存 %1$d 张 · %2$d MB</string>
+    <string name="settings_row_cache_off">未开启（不写盘）</string>
+    <string name="settings_row_haptic_on_fmt">开 · 强度「%1$s」</string>
+    <string name="settings_row_haptic_off">关</string>
+    <string name="settings_row_look_follow_fmt">跟随系统 · 系统现在是%1$s</string>
+    <!-- 一级底部：版本 + 数据来源。来源这句必须留在外面，不能只藏在「关于」里 -->
+    <string name="settings_footer_fmt">%1$s %2$s · 数据来自 LUMIX Lab 官方接口</string>
+    <string name="settings_sync_desc">到点后在启动时后台拉一次目录（新上架的 LUT + 最新下载量），不阻塞界面。\n注意：只拉列表，不会把全部格调/样张重新补一遍 —— 那要几分钟。新增的条目会在你点「补格调」时补齐。</string>
+    <string name="settings_sync_state_fmt">上次同步：%1$s　·　本地 %2$d 条</string>
+    <string name="settings_sync_now">立即更新一次</string>
+
+    <string name="settings_cache_section">离线样张缓存</string>
+    <string name="settings_cache_desc_fmt">官方接口为每枚 LUT 提供两张样张（原图 + 套用效果），滑动对比就是这两张。\n默认不缓存：看图需要联网。开启后会把样张存到本地，断网也能拖对比。\n代价：约 %1$d MB 空间（存在应用缓存目录，系统清理缓存时可能被回收）。</string>
+    <string name="settings_cache_switch">把官方样张缓存到本地</string>
+    <string name="settings_cache_state_fmt">已缓存 %1$d 张，占 %2$d MB%3$s</string>
+    <string name="settings_cache_off_suffix">　（未开启，不写盘）</string>
+    <string name="settings_cache_all">缓存全部样张</string>
+    <string name="settings_cache_clear">清理缓存</string>
+    <string name="settings_cache_cleared">已清理</string>
+
+    <string name="settings_haptic_section">触感反馈</string>
+    <string name="settings_haptic_desc">Tab 切换、分段控件、收起/展开、长按删除、拖动对比把手时的一下轻振。\n强度只影响本应用；关掉开关就完全不震。</string>
+    <string name="settings_haptic_switch">开启触感反馈</string>
+    <string name="settings_haptic_state_on_fmt">当前：开 · 强度「%1$s」</string>
+    <string name="settings_haptic_state_off">当前：关（点击不会有任何振动）</string>
+
+    <string name="settings_look_section">外观</string>
+    <string name="settings_look_desc">默认跟随系统。选「浅色 / 深色」会覆盖系统设置，只影响本应用，不跟系统的定时/日落规则走。</string>
+    <string name="settings_look_unsupported_fmt">这个 Android 版本（%1$s）不支持单独给某个应用指定深浅色，外观跟随系统设置。</string>
+    <string name="settings_look_state_follow_fmt">当前：跟随系统 · 系统现在是%1$s</string>
+    <string name="settings_look_state_fixed_fmt">当前：%1$s（只影响本应用）</string>
+
+    <string name="settings_foot">服务端目录实测共 199 条，本地库就是全量。\n搜索与筛选一直是纯本地 SQL（服务端无全文检索、不支持排序）。</string>
+
+    <!-- 设置页的对话框 / toast -->
+    <string name="settings_syncing">正在更新目录…</string>
+    <string name="settings_sync_throttled_fmt">被限流，第 %1$d 次重试，等 %2$d 秒…</string>
+    <string name="settings_sync_done_fmt">已同步 %1$d 条（本地 %2$d 条）</string>
+    <string name="settings_sync_failed_fmt">更新失败：%1$s</string>
+    <string name="settings_cache_need_switch">请先勾选上面的开关</string>
+    <string name="settings_cache_empty_lib">本地库是空的，先「预载全部」</string>
+    <string name="settings_cache_running">缓存样张…</string>
+    <string name="settings_cache_done_all">样张已全部缓存，可离线查看对比</string>
+    <string name="settings_cache_done_partial_fmt">完成，其中 %1$d 张没取到（网络或服务端问题）</string>
+
+    <!-- 设置页的两组选项：文案进资源，键（open/1d/…）留在 Prefs -->
+    <string-array name="settings_freq_labels">
+        <item>每次打开</item>
+        <item>1 天</item>
+        <item>3 天</item>
+        <item>5 天</item>
+        <item>1 周</item>
+        <item>手动</item>
+    </string-array>
+    <string-array name="settings_haptic_levels">
+        <item>低</item>
+        <item>中</item>
+        <item>高</item>
+    </string-array>
+    <string-array name="settings_look_labels">
+        <item>跟随系统</item>
+        <item>浅色</item>
+        <item>深色</item>
+    </string-array>
 </resources>
