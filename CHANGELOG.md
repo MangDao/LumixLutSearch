@@ -54,8 +54,9 @@ LUT 详情页对比区右下角新增「＋」：挑一张自己的照片，用�
 ### 已知
 
 - 编辑器需要 **OpenGL ES 3.0**；视频导出仅 `arm64-v8a`
-- `src/debug/assets/` 里的对拍素材（std / vlog / sample / bars / gradient / teal，约 18 MB）**只在 debug 包**里，
-  release 包不会带上——但当前发布的是 debug 包，所以下载到的 APK 里会有这部分体积
+- 对拍素材（std / vlog / sample / bars / gradient / teal，约 18 MB）已移到仓库根 `fixtures/`，
+  默认不参与构建；需要时用 `./gradlew assembleDebug -PwithFixtures`
+- `EditActivity` 不再对外导出（`android:exported="false"`）—— 它只由主界面内部显式启动，无需暴露给第三方 App
 
 ## v2.4（2026-10-18）
 

@@ -31,6 +31,17 @@ android {
         }
     }
 
+    // 对拍素材（std / vlog / sample / bars / gradient / teal，约 18 MB）放在仓库根的 fixtures/，
+    // 默认不参与构建 —— 免得打出来的包白胖 18 MB。要做 GL 滤镜对拍时加一个开关：
+    //   ./gradlew assembleDebug -PwithFixtures
+    sourceSets {
+        debug {
+            if (project.hasProperty('withFixtures')) {
+                assets.srcDirs += rootProject.file('fixtures')
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

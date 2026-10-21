@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/github/v/release/MangDao/LumixLutSearch?style=flat-square&color=00c8c8" alt="Release" />
   </a>
   <img src="https://img.shields.io/badge/Android-8.0%2B-00c8c8?style=flat-square" alt="Android 8.0+" />
-  <img src="https://img.shields.io/badge/dependencies-none-00c8c8?style=flat-square" alt="无第三方依赖" />
+  <img src="https://img.shields.io/badge/deps-ffmpeg--kit%20min%20(LGPL)-00c8c8?style=flat-square" alt="唯一依赖：ffmpeg-kit-min" />
   <img src="https://img.shields.io/badge/license-MIT-00c8c8?style=flat-square" alt="MIT" />
 </p>
 
@@ -24,11 +24,12 @@
 
 ---
 
-## 更新（v2.4，2026-10-18）
+## 更新（v2.5，2026-10-21）
 
-新增「**松下 25 周年专属及官方 LUT**」专栏（松影俱乐部，58 条）：官方对比图、格调标签、官网简介、
-WARM/COOL 冷暖拆卡、`.cube` / `.vlt` 都支持下载。同时修掉下载链路 5 个真问题、简介改为中文、
-暗色选中态对比度 2.02:1 → 7.50:1、chip 与分段控件触摸区补到 48dp。
+把 LUT 从「找 + 下」推进到「用」：**内置 LUT 编辑器**，照片和视频都能套 —— 调整 / HSL / 色调分离 /
+色调曲线 / 裁剪 / 相框 / 双 LUT 叠加，新增 **V-Log** 支持（自动识别松下 PhotoStyle），
+视频还能套 LUT + 变速导出；详情页右上角可以**挑自己的照片**套当前 LUT 做分屏对比。
+编辑器与导出全部在本地完成，不上传、不需要账号。
 完整清单见 [CHANGELOG.md](CHANGELOG.md)。
 
 ---
@@ -56,8 +57,16 @@ WARM/COOL 冷暖拆卡、`.cube` / `.vlt` 都支持下载。同时修掉下载�
 
 ### 下载安装
 
-直接到 [Releases](https://github.com/MangDao/LumixLutSearch/releases/latest) 下载 APK，
-手机上允许「安装未知来源应用」即可。需要 **Android 8.0 及以上**。
+到 [Releases](https://github.com/MangDao/LumixLutSearch/releases/latest) 下载 APK，手机上允许
+「安装未知来源应用」即可。**Android 8.0 及以上**，仅 **arm64-v8a**；编辑器需要 **OpenGL ES 3.0**
+（不支持时只会提示，不会崩）。
+
+| 文件 | 体积 | 说明 |
+|---|---|---|
+| `LUT-Search-v2.5-debug.apk` | 约 24 MB | **推荐**。官方构建，功能完整，不含调试素材 |
+| `LUT-Search-v2.5-debug-full.apk` | 约 40 MB | 同一份代码，额外打了对拍用的测试素材（std / vlog / sample / bars / gradient / teal），正常使用不需要 |
+
+两个包是同一个 debug 签名，可以互相覆盖安装、升级不丢数据。
 
 ### 界面截图
 
@@ -128,9 +137,15 @@ echo "sdk.dir=/path/to/android-sdk" > local.properties
 
 Windows 下用 `gradlew.bat`。
 
-**环境说明**：本项目**不依赖 androidx，也没有任何第三方依赖** ——
-全部界面用原生 `View` 代码构建。这样做是为了让 APK 尽量小、依赖树干净，
-代价是所有控件（含自动换行容器、底部弹层、图片加载器）都得自己写。
+**环境说明**：本项目**不依赖 androidx**，全部界面用原生 `View` 代码构建 ——
+自动换行容器、底部弹层、图片加载器都是手写的。**唯一的第三方依赖**是
+`ffmpeg-kit-min`（LGPL v3，不带外部编解码器，只用于视频转码，编码走系统 MediaCodec）。
+
+做 GL 滤镜对拍时，测试素材放在仓库根 `fixtures/`，默认不进包：
+
+```bash
+./gradlew assembleDebug -PwithFixtures    # 需要素材时才加这个开关
+```
 
 ---
 

@@ -72,7 +72,7 @@
              io.github.lumixlut.search.edit.EditActivity，而类实际在 io.github.lumixlut.edit 包 -->
         <activity
             android:name="io.github.lumixlut.edit.EditActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/edit_title"
             android:theme="@style/EditTheme"
             android:configChanges="orientation|screenSize|keyboardHidden" />
