@@ -1255,6 +1255,17 @@ public class EditActivity extends Activity {
         buttonRow.addView(pickLut);
         content.addView(buttonRow);
 
+        // 「我的 LUT」放在最前面。原来它排在 LUT 槽信息、浓度条和视频入口后面，
+        // 而面板高度是固定的，列表就被顶出可视区 —— 打开 LUT 页一条 LUT 都看不见，
+        // 还得先往上滚才找得到。选 LUT 是这一页最主要的动作，没理由藏在最底下。
+        addSectionTitle(content, "我的 LUT");
+        libraryRow = new LinearLayout(this);
+        libraryRow.setOrientation(LinearLayout.HORIZONTAL);
+        HorizontalScrollView libraryScroll = new HorizontalScrollView(this);
+        libraryScroll.setHorizontalScrollBarEnabled(false);
+        libraryScroll.addView(libraryRow);
+        content.addView(libraryScroll);
+
 
 
         lutLabel = new TextView(this);
@@ -1370,14 +1381,6 @@ public class EditActivity extends Activity {
         });
         intensityRow2.addView(intensityBar2);
         content.addView(intensityRow2);
-
-        addSectionTitle(content, "我的 LUT");
-        libraryRow = new LinearLayout(this);
-        libraryRow.setOrientation(LinearLayout.HORIZONTAL);
-        HorizontalScrollView libraryScroll = new HorizontalScrollView(this);
-        libraryScroll.setHorizontalScrollBarEnabled(false);
-        libraryScroll.addView(libraryRow);
-        content.addView(libraryScroll);
 
         addSectionTitle(content, "视频");
         TextView pickVideo = makeButton("选视频（套 LUT + 变速）", CHIP_BG);
@@ -2491,15 +2494,13 @@ public class EditActivity extends Activity {
     }
 
     /**
-     * 自动模式下按「素材」和「LUT」两边的情况决定：
+     * 自动模式只按「素材」一侧决定，不看 LUT 的 #LUMIXPHOTOSTYLE 声明：
      *
-     *   素材 V-Log + 普通 LUT   → 先解 log，否则只会更灰
-     *   普通素材 + V-Log LUT    → 先把画面转成 V-Log 再喂给 LUT。
-     *                             这条 LUT 的输入域是 0.125~0.6，直通会把
-     *                             大部分像素顶到域外，出来就是一片黑
-     *   两边一致（都普通 / 都是 log）→ 直通
+     *   素材是 V-Log  → 先把 log 解开（否则套任何显示域 LUT 都只会更灰）
+     *   其余一律       → 直通
      *
-     * 之前一律直通，是因为只拿 STD 的 LUT 试过；换成声明 VLOG 的 LUT 就翻车了。
+     * 为什么不看 LUT 一侧：那条注释说明的是「这条 LUT 的制作基底」，
+     * 不是「每次都要先把画面转成 V-Log」的指令。详见下方 applySourceMode() 里的实测数据。
      */
     private void applySourceMode() {
         int mode;
@@ -2514,16 +2515,25 @@ public class EditActivity extends Activity {
             mode = Lut3DFilter.SOURCE_PASSTHROUGH;
             tagRes = R.string.edit_source_force_passthrough;
         } else {
+            // 只看素材，不看 LUT 的声明。
+            //
+            // 旧逻辑是「素材不是 V-Log + LUT 声明 VLOG → 先把画面转成 V-Log」，
+            // 依据是 cube 里的 #LUMIXPHOTOSTYLE VLOG 注释。实测站不住：
+            // 那条注释只说明「这条 LUT 是在 V-Log 素材上做的」，
+            // 不等于「任何素材套它之前都得先编码成 V-Log」。
+            //
+            // 对照 LUMIX Lab 自身：它内置的 LUT 全是 STD / NAT / CNEV2 基底，
+            // 处理照片时从不插入 V-Log 编码。一旦插进去，黑位被抬到
+            // 0.125（31/255）、白点压到 0.598（153/255），对比度和饱和度双双腰斩，
+            // 同一张图能差出 16 dB —— 这就是「各方面都不一样」的主要来源。
+            //
+            // 所以自动模式只做一件必须做的事：素材本身是 V-Log 就解开 log。
+            // 「普通素材 → 转 V-Log」保留在手动档（overrideMode = 1），
+            // 需要复现官方 Real Time LUT 的人自己切。
             boolean sourceIsVLog = source != null && source.kind == SourceProbe.Kind.VLOG;
-            boolean lutWantsVLog = currentLut != null
-                    && currentLut.targetStyle != null
-                    && currentLut.targetStyle.toUpperCase(java.util.Locale.US).contains("VLOG");
-            if (sourceIsVLog && !lutWantsVLog) {
+            if (sourceIsVLog) {
                 mode = Lut3DFilter.SOURCE_VLOG_TO_SRGB;
                 tagRes = R.string.edit_source_auto_from_vlog;
-            } else if (!sourceIsVLog && lutWantsVLog) {
-                mode = Lut3DFilter.SOURCE_SRGB_TO_VLOG;
-                tagRes = R.string.edit_source_auto_vlog;
             } else {
                 mode = Lut3DFilter.SOURCE_PASSTHROUGH;
                 tagRes = R.string.edit_source_auto_passthrough;

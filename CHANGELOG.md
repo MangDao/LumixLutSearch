@@ -1,5 +1,63 @@
 # 更新记录
 
+## v2.5.1（2026-10-21）
+
+修三个「套 LUT 用不了 / 出来不一样」的真问题。没有新功能，全部属于「本来就该这样」。
+
+### 修复：V-Log 不再由 LUT 的声明自动触发
+
+`#LUMIXPHOTOSTYLE VLOG` 只说明「这条 LUT 是在 V-Log 素材上做的」，不是
+「任何素材套它之前都得先编码成 V-Log」。旧逻辑把后者当成了前者：只要 LUT 带这行注释、
+素材又不是 V-Log，就把整张图塞进 V-Log 域。同一张相机原图、只切换素材模式：
+
+| | 原图 | 直通 | 转 V-Log |
+|---|---|---|---|
+| 最暗 1% | 13.6 | 13.6 | **35.9**（= 0.125×255）|
+| 最亮 1% | 255.0 | 255.0 | **153.0**（= 0.598×255）|
+| 对比度 std | 64.4 | 64.4 | **32.0** |
+| 饱和度 | 14.1 | 14.1 | **6.7** |
+| 锐度 lapVar | 560 | 561 | **157** |
+| PSNR vs 原图 | — | **54.17 dB** | 16.28 dB |
+
+对照 LUMIX Lab 自身：它内置的 6 条 LUT 基底全是 STD / NAT / CNEV2，**一条 VLOG 都没有**，
+处理照片时从不插入 V-Log 编码。所以自动模式改成只看素材一侧——素材是 V-Log 就解 log，
+其余一律直通。「普通素材 → 转 V-Log」保留在手动档（点素材行 `⟳` 切）。
+
+### 修复：「我的 LUT」每一条都点不动
+
+下载流程把 .cube 写进 `MediaStore.Downloads` 并记下 content:// uri。读那条 uri 需要
+`READ_MEDIA_DOWNLOADS`（Android 13+）或 `MANAGE_EXTERNAL_STORAGE`，本应用两个都没声明：
+
+```
+E EditActivity: LUT 载入失败
+java.lang.SecurityException: … has no access to
+  content://media/external/downloads/1000066598
+    at SourceLoader.open(SourceLoader.java:113)
+```
+
+**下载完当场能用**（同进程持有临时授权），**app 重启后再点必挂**。
+
+现在 `Downloader.saveCube` 写完公共目录（给用户和别的 app 看）之后，再往
+`filesDir/luts/` 写一份私有副本；`LutLibrary.resolve` 私有副本优先。
+`Download/LUMIX_LUT/` 的位置和提示文案都不变。
+
+> 已下载过的 LUT 不会自动补齐私有副本（那份内容现在读不出来），表现为点卡片仍报
+> 「载入失败」，重新下载一次即可。
+
+### 修复：「我的 LUT」列表被顶出可视区
+
+LUT 页原来把卡片列表排在槽信息、浓度条、视频入口后面，而编辑面板高度固定，
+打开 LUT 页一条 LUT 都看不见，得先往上滚。现在整块移到「选照片 / 选 LUT」下面。
+
+### 已知
+
+与 LUMIX Lab 套同一条 LUT 的结果仍不一致（同图同位约 27 dB）。已逐项排除：
+8bit FBO 串联（直通 54.17 dB，无损）、导入导出时的 YUV 色度抽样（同上）、LUT 纹理精度
+（`GL_RGB16F`）、`gamma_corrected_33.cube` 前置/后置（16.12 / 17.97 dB，更差）、
+线性空间查表（22.82 dB）、三线性 vs 四面体插值（26.97 vs 27.03 dB）。
+LUMIX Lab 的 APK 里有 33 个 Vulkan compute shader（`preProcess` / 五级降噪 / 锐化 /
+镜头校正 / `backendProcess`），LUT 只是其中一环——差距来自整条管线，不在查表那一步。
+
 ## v2.5（2026-10-21）
 
 自 `v2.4` 以来的一次大更新：把 LUT 从「找 + 下」推进到「用」——内置一个本地 LUT 编辑器，

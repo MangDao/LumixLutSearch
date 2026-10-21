@@ -93,8 +93,18 @@ public final class LutLibrary {
         return out;
     }
 
-    /** uri 优先（MediaStore 授权过），拿不到再按落盘路径拼 */
+    /** 私有副本优先，其次 MediaStore uri，最后按落盘路径拼 */
     private static Uri resolve(Context ctx, Store.Dl d) {
+        // 私有副本是最可靠的一份。公共下载目录受 scoped storage 限制：
+        // 本应用没有 READ_MEDIA_DOWNLOADS / MANAGE_EXTERNAL_STORAGE，
+        // 去读 MediaStore 里那条记录会抛 SecurityException
+        // （下载完当场能用，app 重启后再点就失效）。
+        if (d.cubeName != null && !d.cubeName.isEmpty()) {
+            File priv = new File(new File(ctx.getFilesDir(), "luts"), d.cubeName);
+            if (priv.exists()) {
+                return Uri.fromFile(priv);
+            }
+        }
         if (d.uri != null && !d.uri.isEmpty()) {
             try {
                 Uri u = Uri.parse(d.uri);

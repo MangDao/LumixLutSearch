@@ -10,8 +10,8 @@ android {
         applicationId "io.github.lumixlut.search"
         minSdk 26
         targetSdk 34
-        versionCode 10
-        versionName "2.5"
+        versionCode 11
+        versionName "2.5.1"
 
         // 只留 arm64：FFmpeg 的 so 每个架构 8 MB 左右，全打进去会肥到没法看。
         // 真要兼容 32 位老机器，这里补 armeabi-v7a 即可。

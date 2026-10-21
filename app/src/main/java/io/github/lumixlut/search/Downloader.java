@@ -308,6 +308,21 @@ public final class Downloader {
             r.uri = Uri.fromFile(f);
             r.displayPath = f.getAbsolutePath();
         }
+
+        // 公共目录那份只是「给用户和别的 app 看的」。编辑器不能直接读它：
+        // Android 11 起读 Download 集合要 READ_MEDIA_DOWNLOADS（13+）
+        // 或 MANAGE_EXTERNAL_STORAGE，本应用两个都没有，于是会出现
+        //   SecurityException: has no access to content://media/external/downloads/…
+        // ——下载完当场还能用（同一进程持有临时授权），app 重启后再点就挂。
+        // 所以在自己的私有目录留一份，编辑器只认这一份。
+        File lutsDir = new File(ctx.getFilesDir(), "luts");
+        if (lutsDir.exists() || lutsDir.mkdirs()) {
+            try (FileOutputStream fo = new FileOutputStream(new File(lutsDir, r.cubeName))) {
+                fo.write(cube);
+            } catch (IOException ignored) {
+                // 私有副本写失败不影响公共目录那份，只是编辑器可能读不到
+            }
+        }
     }
 
     private static byte[] readAll(InputStream is) throws IOException {
