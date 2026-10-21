@@ -10,8 +10,14 @@ android {
         applicationId "io.github.lumixlut.search"
         minSdk 26
         targetSdk 34
-        versionCode 9
-        versionName "2.4"
+        versionCode 10
+        versionName "2.5"
+
+        // 只留 arm64：FFmpeg 的 so 每个架构 8 MB 左右，全打进去会肥到没法看。
+        // 真要兼容 32 位老机器，这里补 armeabi-v7a 即可。
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
     }
 
     buildTypes {
@@ -37,6 +43,14 @@ android {
     }
 }
 
-// 零第三方依赖：HTTP 用 HttpURLConnection，JSON 用内置 org.json，UI 用原生控件
+// 唯一一个第三方依赖，只为了视频转码：
+//   ffmpeg-kit-min 是 LGPL v3，且【不带任何外部编解码器】——
+//   视频编解码全部走系统 MediaCodec，所以既没有 GPL 传染，
+//   也不会因为内置编码器把包撑大。POM 里零 dependencies，不牵 androidx。
+// 原 com.arthenica 那套 2025-04 归档了，这是社区维护的 continuation，API 完全一致。
 dependencies {
+    implementation 'dev.ffmpegkit-maintained:ffmpeg-kit-min:8.1.7'
+    // 这个 fork 的 POM 漏声明了运行时依赖，缺了它一加载就
+    // ClassNotFoundException: com.arthenica.smartexception.java.Exceptions
+    implementation 'com.arthenica:smart-exception-java:0.2.1'
 }

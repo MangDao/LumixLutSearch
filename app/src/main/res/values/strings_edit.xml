@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_title">编辑</string>
+    <string name="edit_back">返回</string>
+    <string name="edit_pick_photo">选照片</string>
+    <string name="edit_pick_lut">选 LUT</string>
+    <string name="edit_intensity">浓度</string>
+    <string name="edit_lut_slot">LUT 1: %1$s</string>
+    <string name="edit_lut_none">无</string>
+    <string name="edit_loading">载入中…</string>
+    <string name="edit_hint_photo">先选一张照片</string>
+    <string name="edit_failed">失败：%1$s</string>
+
+    <string name="edit_source_unknown">素材：未知</string>
+    <string name="edit_source_auto_vlog">自动·转 V-Log</string>
+    <string name="edit_source_auto_passthrough">自动·直通</string>
+    <string name="edit_source_auto_from_vlog">自动·解 V-Log</string>
+    <string name="edit_source_force_vlog">强制转 V-Log</string>
+    <string name="edit_source_force_from_vlog">强制解 V-Log</string>
+    <string name="edit_source_force_passthrough">强制直通</string>
+    <string name="edit_source_hint">点这一行切换：自动 / 转 V-Log / 直通</string>
+</resources>

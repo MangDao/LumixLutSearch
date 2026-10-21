@@ -30,6 +30,17 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:colorAccent">@color/accent</item>
     </style>
+    <!--
+      编辑器用深色：预览要黑底才准，界面跟着黑，状态栏一起刷黑。
+    -->
+    <style name="EditTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#FF000000</item>
+        <item name="android:statusBarColor">#FF000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">#FF000000</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:colorAccent">#FFFFD60A</item>
+    </style>
 
 
 </resources>

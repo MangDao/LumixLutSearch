@@ -67,5 +67,15 @@
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity" />
 
+        <!-- 编辑器：第 1 步只打通 选图 / 套 LUT / 拖浓度 -->
+        <!-- 必须写全限定名：.edit.EditActivity 会按 applicationId 展开成
+             io.github.lumixlut.search.edit.EditActivity，而类实际在 io.github.lumixlut.edit 包 -->
+        <activity
+            android:name="io.github.lumixlut.edit.EditActivity"
+            android:exported="true"
+            android:label="@string/edit_title"
+            android:theme="@style/EditTheme"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
     </application>
 </manifest>

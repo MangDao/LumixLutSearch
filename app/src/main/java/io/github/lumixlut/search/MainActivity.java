@@ -1,5 +1,7 @@
 package io.github.lumixlut.search;
 
+import android.util.Log;
+import android.util.TypedValue;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -60,6 +62,12 @@ public class MainActivity extends Activity {
 
     /** 搜索页回传选中项的请求码。 */
     private static final int REQ_SEARCH = 1001;
+    /** 详情页里「用自己的照片试这条 LUT」 */
+    private static final int REQ_DETAIL_PHOTO = 1002;
+
+    /** 详情页加号点了之后，等着回填的对比控件和 LUT code */
+    private CompareView pendingCompareView;
+    private String pendingLutCode;
 
     private Store store;
     private final ExecutorService pool = Executors.newFixedThreadPool(3);
@@ -167,6 +175,10 @@ public class MainActivity extends Activity {
         };
         for (int i = 0; i < names.length; i++) {
             final int idx = i;
+            // 编辑入口插在「我的」前面，让「我的」落在最右
+            if (i == names.length - 1) {
+                tabBar.addView(buildEditEntryCell(), Ui.lpWeight(1f));
+            }
             LinearLayout cell = Ui.col(this);
             cell.setGravity(Gravity.CENTER);
             // 触控目标 ≥ 48dp；原来那排「●」圆点看着像未读标记，其实什么都不表示，已经去掉
@@ -190,7 +202,34 @@ public class MainActivity extends Activity {
             cell.setOnClickListener(v -> { Ui.tick(v); showTab(idx); });
             tabBar.addView(cell, Ui.lpWeight(1f));
         }
+
         return wrap;
+    }
+
+    /**
+     * 编辑器入口。不在上面那套 tab 索引里（showTab 只认 0..3），
+     * 点一下直接开编辑器，用强调色和普通 tab 区分开。
+     */
+    private View buildEditEntryCell() {
+        LinearLayout editCell = Ui.col(this);
+        editCell.setGravity(Gravity.CENTER);
+        editCell.setMinimumHeight(dp(52));
+        editCell.setPadding(0, dp(8), 0, dp(6));
+        TextView editLabel = Ui.text(this, "编辑", 12f, Ui.TEXT_SUB, false);
+        editLabel.setGravity(Gravity.CENTER);
+        editCell.addView(editLabel);
+        View editInd = new View(this);
+        editInd.setBackgroundColor(Ui.ACCENT);
+        LinearLayout.LayoutParams eip = new LinearLayout.LayoutParams(dp(18), dp(2));
+        eip.topMargin = dp(6);
+        editCell.addView(editInd, eip);
+        editInd.setAlpha(0f);
+        editCell.setOnClickListener(v -> {
+            Ui.tick(v);
+            startActivity(new android.content.Intent(this,
+                    io.github.lumixlut.edit.EditActivity.class));
+        });
+        return editCell;
     }
 
     /**
@@ -1422,7 +1461,29 @@ public class MainActivity extends Activity {
             // 把手跟着第一张图一起出现：原图在加载就画待命态，官方没有原图就收起
             if (l.thumbBefore.isEmpty()) cmp.setNoBefore(true);
             else cmp.setPendingBefore(true);
-            col.addView(cmp, Ui.lpMatch());
+
+            // 对比图右下角挂一个半透明加号：点它换成自己的照片来试这条 LUT
+            FrameLayout cmpBox = new FrameLayout(this);
+            cmpBox.addView(cmp, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            TextView plus = new TextView(this);
+            plus.setText("＋");
+            plus.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+            plus.setTextColor(0xE6FFFFFF);
+            plus.setGravity(Gravity.CENTER);
+            android.graphics.drawable.GradientDrawable plusBg =
+                    new android.graphics.drawable.GradientDrawable();
+            plusBg.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            plusBg.setColor(0x80000000);
+            plus.setBackground(plusBg);
+            plus.setContentDescription("用自己的照片对比");
+            plus.setOnClickListener(v -> pickPhotoForDetailCompare(cmp, l));
+            FrameLayout.LayoutParams plusParams = new FrameLayout.LayoutParams(dp(44), dp(44));
+            plusParams.gravity = Gravity.END | Gravity.BOTTOM;
+            plusParams.setMargins(0, 0, dp(12), dp(12));
+            cmpBox.addView(plus, plusParams);
+
+            col.addView(cmpBox, Ui.lpMatch());
             col.addView(hint, Ui.lpMatch());
             if (hasPair) {
                 loadSamplePair(cmp, hint, l);
@@ -1718,9 +1779,137 @@ public class MainActivity extends Activity {
         }
     }
 
+    /**
+     * 详情页加号：拿自己的照片试这条 LUT。
+     *
+     * 只有用户下载过这条 LUT 才有本地 cube 可用 —— 详情页大图是官方样张，
+     * 拿不到 LUT 数据本身，所以没下载时直接说清楚，不要让用户选了图才发现不行。
+     */
+    private void pickPhotoForDetailCompare(CompareView target, Lut lut) {
+        Store.Dl downloaded = findDownload(lut.code);
+        if (downloaded == null) {
+            toast("先下载这条 LUT，才能用自己的照片对比");
+            return;
+        }
+        pendingCompareView = target;
+        pendingLutCode = lut.code;
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        try {
+            startActivityForResult(intent, REQ_DETAIL_PHOTO);
+        } catch (Exception e) {
+            toast("打不开系统选择器");
+        }
+    }
+
+    private Store.Dl findDownload(String code) {
+        Store s = null;
+        try {
+            s = new Store(this);
+            java.util.List<Store.Dl> list = s.listDownloads();
+            if (list == null) {
+                return null;
+            }
+            for (Store.Dl d : list) {
+                if (code.equals(d.code)) {
+                    return d;
+                }
+            }
+        } catch (Throwable t) {
+            Log.w("MainActivity", "查下载记录失败：" + t.getMessage());
+        } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        return null;
+    }
+
+    /** 后台把照片套上 LUT，回来塞进对比控件 */
+    private void applyPhotoForCompare(android.net.Uri photoUri) {
+        final CompareView target = pendingCompareView;
+        final String code = pendingLutCode;
+        if (target == null || code == null) {
+            return;
+        }
+        toast("正在套用 LUT…");
+        pool.execute(() -> {
+            Bitmap before = null;
+            Bitmap after = null;
+            try {
+                Store.Dl dl = findDownload(code);
+                if (dl == null) {
+                    ui.post(() -> toast("找不到这条 LUT 的本地文件"));
+                    return;
+                }
+                // 1) 读 cube
+                io.github.lumixlut.edit.lut.LutData data;
+                try (java.io.InputStream in = io.github.lumixlut.edit.SourceLoader
+                        .open(this, resolveDlUri(dl))) {
+                    if (in == null) {
+                        ui.post(() -> toast("LUT 文件打不开"));
+                        return;
+                    }
+                    data = io.github.lumixlut.edit.lut.CubeParser.parse(in, dl.cubeName);
+                }
+                // 2) 读照片，缩到 1600 长边 —— 对比图不用原分辨率
+                before = io.github.lumixlut.edit.SourceLoader.load(this, photoUri, 1600);
+                if (before == null) {
+                    ui.post(() -> toast("照片读不出来"));
+                    return;
+                }
+                after = io.github.lumixlut.edit.lut.CpuLut.apply(before, data, 1f);
+                final Bitmap fBefore = before;
+                final Bitmap fAfter = after;
+                ui.post(() -> {
+                    target.setBitmaps(fBefore, fAfter);
+                    target.setNoBefore(false);
+                    target.setSplit(0.5f);
+                    toast("拖动中间的把手对比效果");
+                });
+            } catch (Throwable t) {
+                Log.w("MainActivity", "套用 LUT 失败", t);
+                ui.post(() -> toast("处理失败：" + t.getMessage()));
+            }
+        });
+    }
+
+    /** 下载记录里的 uri 可能是 content://，也可能只剩落盘路径 */
+    private android.net.Uri resolveDlUri(Store.Dl d) {
+        if (d.uri != null && !d.uri.isEmpty()) {
+            try {
+                android.net.Uri u = android.net.Uri.parse(d.uri);
+                if (u.getScheme() != null) {
+                    return u;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        String path = d.displayPath;
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+        if (path.startsWith("/")) {
+            return android.net.Uri.fromFile(new java.io.File(path));
+        }
+        java.io.File dir = new java.io.File(
+                android.os.Environment.getExternalStoragePublicDirectory(
+                        android.os.Environment.DIRECTORY_DOWNLOADS), "LUMIX_LUT");
+        return android.net.Uri.fromFile(new java.io.File(dir, new java.io.File(path).getName()));
+    }
+
     @Override
     protected void onActivityResult(int req, int res, Intent data) {
         super.onActivityResult(req, res, data);
+        if (req == REQ_DETAIL_PHOTO && res == RESULT_OK && data != null
+                && data.getData() != null) {
+            applyPhotoForCompare(data.getData());
+            return;
+        }
         if (req == REQ_SEARCH && res == RESULT_OK && data != null) {
             final String code = data.getStringExtra(SearchActivity.EXTRA_CODE);
             if (code == null || code.isEmpty()) return;
